@@ -1,0 +1,35 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ID</th>
+        <th>FIRST NAME</th>
+        <th>LAST NAME</th>
+        <th>SREET ADDRESS</th>
+        <th>CITY</th>
+        <th>ZIP CODE</th>
+        <th>EMAIL</th>
+        <th>PASSWORD</th>
+        <th>PHONE</th>
+        <th>BIRTHDAY</th>
+        <th>REGISTRATION DATE</th>
+    </tr>
+    {% for person in persons %}
+       <tr>
+           <td>{{person.person_id}}</td>
+           <td>{{person.first_name }}</td>
+           <td>{{person.last_name}}</td>
+           <td>{{person.street_address}}</td>
+           <td>{{person.city}}</td>
+           <td>{{person.zip_code}}</td>
+           <td>{{person.email}}</td>
+           <td>{{person.password}}</td>
+           <td>{{person.phone}}</td>
+           <td>{{person.birthdate}}</td>
+           <td>{{person.regi_date}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

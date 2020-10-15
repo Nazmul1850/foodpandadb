@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "foodpanda/custom.css" %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Girassol&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="{% static "foodpanda/logo.png" %}">
+
+    <title>FOODPANDA</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>FOODOANDA DATABASE</h1>
+    </div>
+    <div class="tablebuttons">
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">PERSONS</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">CUSTOMERS</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">DELIVERY MAN</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">RESTAURANT</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">FOOD</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">ORDER</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">PROMO</a><br>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">PAYMENT</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">OFFER</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">REVIEW</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">PERSON PROMO</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">ORDERED ITEMS</a>
+      <a role="button" href="{% url 'persons' %}" class="btn btn-primary">MENU</a>
+    </div>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+  </html>

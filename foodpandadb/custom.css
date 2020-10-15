@@ -1,0 +1,11 @@
+body {
+    font-family: 'Girassol', cursive;
+}
+div.header {
+  text-align: center;
+  width: 100%;
+  background-color: yellowgreen;
+}
+div.tablebuttons {
+  padding-left: 20px;
+}

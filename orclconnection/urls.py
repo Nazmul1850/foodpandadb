@@ -19,5 +19,6 @@ import foodpandadb.views as food_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('persons/', food_view.list_person),
+    path('',food_view.home),
+    path('persons/', food_view.list_person, name='persons'),
 ]
