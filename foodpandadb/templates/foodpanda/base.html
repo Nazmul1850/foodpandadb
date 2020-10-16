@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "foodpanda/custom.css" %}">
+    <link rel="stylesheet" href="{% static "foodpanda/custom.css" now "U" %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Girassol&display=swap" rel="stylesheet">
 
@@ -21,24 +21,20 @@
       <h1>FOODOANDA DATABASE</h1>
     </div>
     <div class="tablebuttons">
-      <div class="part1">
-        <a role="button" href="{% url 'persons' %}" class="btn btn-primary">PERSONS</a>
-        <a role="button" href="{% url 'customers' %}" class="btn btn-primary">CUSTOMERS</a>
-        <a role="button" href="{% url 'delivery' %}" class="btn btn-primary">DELIVERY MAN</a>
-        <a role="button" href="{% url 'locations' %}" class="btn btn-primary">LOCATIONS</a>
-        <a role="button" href="{% url 'restaurant' %}" class="btn btn-primary">RESTAURANT</a>
-        <a role="button" href="{% url 'food' %}" class="btn btn-primary">FOOD</a>
-        <a role="button" href="{% url 'orders' %}" class="btn btn-primary">ORDER</a><br><br>
-      </div>
-      <div class="part2">
-        <a role="button" href="{% url 'promos' %}" class="btn btn-primary">PROMO</a>
-        <a role="button" href="{% url 'payments' %}" class="btn btn-primary">PAYMENT</a>
-        <a role="button" href="{% url 'offers' %}" class="btn btn-primary">OFFER</a>
-        <a role="button" href="{% url 'reviews' %}" class="btn btn-primary">REVIEW</a>
-        <a role="button" href="{% url 'customer_promo' %}" class="btn btn-primary">PERSON PROMO</a>
-        <a role="button" href="{% url 'orderd_items' %}" class="btn btn-primary">ORDERED ITEMS</a>
-        <a role="button" href="{% url 'menu' %}" class="btn btn-primary">MENU</a>
-      </div>
+        <a role="button" href="{% url 'persons' %}" class="btn">PERSONS</a>
+        <a role="button" href="{% url 'customers' %}" class="btn">CUSTOMERS</a>
+        <a role="button" href="{% url 'delivery' %}" class="btn">DELIVERY MAN</a>
+        <a role="button" href="{% url 'locations' %}" class="btn">LOCATIONS</a>
+        <a role="button" href="{% url 'restaurant' %}" class="btn">RESTAURANT</a>
+        <a role="button" href="{% url 'food' %}" class="btn">FOOD</a>
+        <a role="button" href="{% url 'orders' %}" class="btn">ORDER</a>
+        <a role="button" href="{% url 'promos' %}" class="btn">PROMO</a>
+        <a role="button" href="{% url 'payments' %}" class="btn">PAYMENT</a>
+        <a role="button" href="{% url 'offers' %}" class="btn">OFFER</a>
+        <a role="button" href="{% url 'reviews' %}" class="btn">REVIEW</a>
+        <a role="button" href="{% url 'customer_promo' %}" class="btn">PERSON PROMO</a>
+        <a role="button" href="{% url 'orderd_items' %}" class="btn">ORDERED ITEMS</a>
+        <a role="button" href="{% url 'menu' %}" class="btn">MENU</a>
 
     </div>
     <div class="container">

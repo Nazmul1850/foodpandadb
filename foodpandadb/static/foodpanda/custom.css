@@ -7,8 +7,15 @@ div.header {
   background-color: yellowgreen;
 }
 div.tablebuttons {
-  padding-left: 20px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
 }
-div.part1 .part2{
-  align-items: center;
+.btn {
+  padding-right: 5px;
+  color: blue;
 }
+.tableheader {
+  text-align: center;
+}
+/* NOTE: cltr f5 ---> reloads css file */
