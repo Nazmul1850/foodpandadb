@@ -1,0 +1,16 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th> CUSTOMER ID </th>
+        <th>PROMO CODE</th>
+    </tr>
+    {% for cpromo in customer_promo %}
+       <tr>
+           <td>{{cpromo.customer_id}}</td>
+           <td>{{cpromo.promo_code }}</td>
+    {% endfor %}
+
+</table>
+{% endblock %}

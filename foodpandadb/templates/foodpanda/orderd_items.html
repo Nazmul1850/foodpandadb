@@ -1,0 +1,16 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th> ORDER ID </th>
+        <th>FOOD ID</th>
+    </tr>
+    {% for ot in orderd_items %}
+       <tr>
+           <td>{{ot.order_id}}</td>
+           <td>{{ot.food_id }}</td>
+    {% endfor %}
+
+</table>
+{% endblock %}

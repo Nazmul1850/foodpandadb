@@ -1,0 +1,23 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th> CODE </th>
+        <th>DISCPUNT PCT</th>
+        <th>START TIME</th>
+        <th>END TIME</th>
+        <th>STATUS</th>
+    </tr>
+    {% for promo in promos %}
+       <tr>
+           <td>{{promo.code}}</td>
+           <td>{{promo.discount_pct }}</td>
+           <td>{{promo.start }}</td>
+           <td>{{promo.end }}</td>
+           <td>{{promo.status}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

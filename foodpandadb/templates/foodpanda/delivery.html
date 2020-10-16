@@ -1,0 +1,21 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>DELIVERY MAN ID</th>
+        <th>PERSON ID</th>
+        <th>SALARY</th>
+        <th>IMAGE</th>
+    </tr>
+    {% for d in delivery %}
+       <tr>
+           <td>{{d.delivery_id}}</td>
+           <td>{{d.person_id}}</td>
+           <td>{{d.salary }}</td>
+           <td>{{d.image }}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

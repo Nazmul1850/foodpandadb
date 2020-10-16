@@ -1,0 +1,21 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>NAME</th>
+        <th>CUISINE</th>
+        <th>PRICE</th>
+        <th>AVAILABILITY</th>
+    </tr>
+    {% for food in foods %}
+       <tr>
+           <td>{{food.name}}</td>
+           <td>{{food.cuisine }}</td>
+           <td>{{food.price }}</td>
+           <td>{{food.availability }}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

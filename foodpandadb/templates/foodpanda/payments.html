@@ -1,0 +1,23 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th> PAYMENT ID </th>
+        <th>AMOUNT</th>
+        <th>METHOD</th>
+        <th>PROMO CODE</th>
+        <th>ORDER ID</th>
+    </tr>
+    {% for payment in payments %}
+       <tr>
+           <td>{{payment.payment_id}}</td>
+           <td>{{payment.amount }}</td>
+           <td>{{payment.method }}</td>
+           <td>{{payment.promo_code }}</td>
+           <td>{{payment.order_id}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

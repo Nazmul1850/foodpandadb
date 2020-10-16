@@ -1,0 +1,27 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ID</th>
+        <th>NAME</th>
+        <th>LOCATION ID</th>
+        <th>PHONE</th>
+        <th>EMAIL</th>
+        <th>OPENNING</th>
+        <th>CLOSING</th>
+    </tr>
+    {% for res in restaurants %}
+       <tr>
+           <td>{{res.restaurant_id}}</td>
+           <td>{{res.name }}</td>
+           <td>{{res.location_id }}</td>
+           <td>{{res.phone }}</td>
+           <td>{{res.email}}</td>
+           <td>{{res.openning }}</td>
+           <td>{{res.closing }}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

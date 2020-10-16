@@ -1,0 +1,25 @@
+{% extends 'foodpanda/base.html' %}
+{% load static %}
+{% block content %}
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th> OFFER ID </th>
+        <th>FOOD ID</th>
+        <th>DISCOUNT PCT</th>
+        <th>MAX DISCOUNT</th>
+        <th>EXPIRE DATE ID</th>
+        <th>RESTAURANT ID</th>
+    </tr>
+    {% for offer in offers %}
+       <tr>
+           <td>{{offer.offer_id}}</td>
+           <td>{{offer.food_id }}</td>
+           <td>{{offer.discount_pct }}</td>
+           <td>{{offer.max_discount }}</td>
+           <td>{{offer.expire}}</td>
+           <td>{{offer.restaurant_id}}</td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}
