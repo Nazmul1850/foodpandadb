@@ -1,19 +1,17 @@
 {% extends 'foodpanda/base.html' %}
 {% load static %}
-{% block content %}
+{% block dbcontent %}
 <div class="tableheader">
-  <h1>LOCATIONS</h1>
+  <h1>LOCATION</h1>
 </div>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th>LOCATION ID</th>
         <th>STREET ADDRESS</th>
         <th>CITY</th>
         <th>ZIP CODE</th>
     </tr>
     {% for l in locations %}
        <tr>
-           <td>{{l.location_id}}</td>
            <td>{{l.street_address }}</td>
            <td>{{l.city }}</td>
            <td>{{l.zip_code }}</td>

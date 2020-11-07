@@ -1,0 +1,42 @@
+.navbar-nav .nav-link {
+    color: rgba(0,0,0,1) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: green !important;
+}
+
+body {
+    font-family: 'Itim', cursive;
+}
+
+#blogtitle {
+    font-size: 6rem;
+}
+
+@media (min-width: 992px) {
+    #hometext {
+        font-size: 4rem;
+    }
+    #blogdetailtitle {
+        font-size: 5rem;
+    }
+}
+div.header {
+  text-align: center;
+  width: 100%;
+  background-color: bisque;
+}
+div.tablebuttons {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+.btn {
+  padding-right: 5px;
+  color: blue;
+}
+.tableheader {
+  text-align: center;
+}
+/* NOTE: cltr f5 ---> reloads css file */

@@ -1,8 +1,8 @@
 {% extends 'foodpanda/base.html' %}
 {% load static %}
-{% block content %}
+{% block dbcontent %}
 <div class="tableheader">
-  <h1>PERSONS</h1>
+  <h1>PERSON</h1>
 </div>
 
 <table width="100%"  border="1">
@@ -10,6 +10,7 @@
         <th>ID</th>
         <th>FIRST NAME</th>
         <th>LAST NAME</th>
+        <th>GENDER</th>
         <th>EMAIL</th>
         <th>PASSWORD</th>
         <th>PHONE</th>
@@ -21,6 +22,7 @@
            <td>{{person.person_id}}</td>
            <td>{{person.first_name }}</td>
            <td>{{person.last_name}}</td>
+           <td>{{person.gender}}</td>
            <td>{{person.email}}</td>
            <td>{{person.password}}</td>
            <td>{{person.phone}}</td>
