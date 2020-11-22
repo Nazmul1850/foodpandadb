@@ -22,7 +22,7 @@
   <body>
     <nav id="topNav" class="navbar navbar-expand-md navbar-light bg-warning">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% url 'homelocation' %}">
       <img src="{% static "foodpandauth/logo1.png" %}" width="30" height="30" class="d-inline-block align-top" alt="Nazmul's Logo">
       {% if 'Person_id' in request.session %}
       <span>HI, <b>{{ request.session.name }}</b><small> Your FOOD is a door away</small></span>

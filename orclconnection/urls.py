@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path
 import foodpandadb.views as food_view
 import foodpandauth.views as auth_view
+import homemodule.views as home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home',food_view.home,name="dbhome"),
+    path('dbhome/',food_view.home,name="dbhome"),
     path('persons/', food_view.list_person, name='persons'),
     path('locations/', food_view.locations, name='locations'),
     path('food/', food_view.food, name='food'),
@@ -42,6 +43,10 @@ urlpatterns = [
   path('',auth_view.home,name='home'),
   path('logoutuser/',auth_view.logoutuser, name='logoutuser'),
   path('updateProfile/',auth_view.updateProfile, name='updateProfile'),
+
+  # NOTE: homemodule
+  path('home/',home_view.home, name="homelocation"),
+   path('location/',home_view.location, name="location"),
 
 
 ]
