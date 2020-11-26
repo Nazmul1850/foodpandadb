@@ -6,13 +6,13 @@
 </div>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th>STREET ADDRESS</th>
+        <th>LOC</th>
         <th>CITY</th>
         <th>ZIP CODE</th>
     </tr>
     {% for l in locations %}
        <tr>
-           <td>{{l.street_address }}</td>
+           <td>{{l.longitude }} , {{l.latitude}}</td>
            <td>{{l.city }}</td>
            <td>{{l.zip_code }}</td>
        </tr>

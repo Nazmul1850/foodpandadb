@@ -40,3 +40,22 @@ div.tablebuttons {
   text-align: center;
 }
 /* NOTE: cltr f5 ---> reloads css file */
+
+.searchContent {
+  margin: auto;
+  margin-top: 50px;
+  width: 50%;
+  height: 120px;
+  padding: 10px;
+
+}
+input.searchbar{
+  width: 80%;
+  height: 40px;
+}
+button.searchButton {
+  background-color: #FFD801;
+  border: 1px solid black;
+  width: 15%;
+  height: 40px;
+}

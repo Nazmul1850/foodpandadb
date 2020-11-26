@@ -41,18 +41,16 @@ def  list_person (request):
 def  locations (request):
     if 'Person_id' in request.session:
         cursor = connection.cursor()
-        id = request.session['Person_id']
-        sql = "SELECT L.STREET_NO, L.CITY, L.ZIP_CODE FROM LOCATION L INNER JOIN CUSTOMER C ON (C.LOCATION_ID = L.LOCATION_ID) WHERE C.PERSON_ID = '"
-        sql += id
-        sql += "'"
+        sql = "SELECT * FROM LOCATION"
         cursor.execute(sql)
         result = cursor.fetchall()
         dict_result = []
         for r in result:
-            street_address = r[0]
-            city = r[1]
-            zip_code = r[2]
-            row = {'street_address':street_address, 'city':city, 'zip_code':zip_code}
+            longitude = r[1]
+            latitude = r[2]
+            city = r[3]
+            zip_code = r[4]
+            row = {'longitude':longitude,'latitude':latitude, 'city':city, 'zip_code':zip_code}
             dict_result.append(row)
         return render(request,'foodpanda/locations.html',{'locations' : dict_result})
     else:

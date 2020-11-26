@@ -1,0 +1,28 @@
+{% extends 'foodpandauth/base.html' %}
+{% block content %}
+<div class="foods">
+  {% if dict_result  %}
+  <div class="foodlist">
+    <!-- {% for key in  dict_result%}
+      <h1>{{ key.name }}</h1>
+
+    {%endfor%} -->
+    <ul>
+    {% for key,values in dict_result.items %}
+      <li><h3>{{key}}</h3>
+      {% for foods in values %}
+      <ul>
+         <li><h4>{{foods.name}}</h4></li>
+         <li>{{foods.price}}</li>
+         <li>{{foods.avl}}</li>
+      </ul>
+      {% endfor %}
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <h1>No Food Available</h1>
+  {% endif %}
+</div>
+{% endblock %}

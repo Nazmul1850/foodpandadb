@@ -46,7 +46,5 @@ urlpatterns = [
 
   # NOTE: homemodule
   path('home/',home_view.home, name="homelocation"),
-   path('location/',home_view.location, name="location"),
-
-
+  # path('res/',home_view.showRestaurant, name="showRestaurant"),
 ]

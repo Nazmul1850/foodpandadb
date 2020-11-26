@@ -1,10 +1,32 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
-
 <div class="hero-content">
   <div class="searchContent">
-    <input type="text" name="searchbox" value="Find Location">
-    <button type="submit" name="find" class="btn btn-primary">Find</button>
+    <input type="text" class="searchbar" name="searchbox" placeholder="Search Nearby Restaurants">
+    <button type="submit"name="search" class="searchButton">Search</button><br>
+    <span>Your current location is ({{address.latitude}},{{address.longitude}}) {{ address.region }}-{{ address.postal }}, {{ address.city }}, {{ address.country }}</span>
+  </div>
+  <div class="restaurants">
+    <table width="100%"  border="1">
+        <tr style="background-color:lightgray">
+            <th>NAME</th>
+            <th>PHONE</th>
+            <th>OPENNING</th>
+            <th>CLOSING</th>
+        </tr>
+        {% for res in restaurant %}
+           <tr>
+               <td><form method="post">
+                 {% csrf_token %}
+                 <input type="submit" name="res_name" value="{{res.name}}">
+               </form></td>
+               <td>{{res.phone }}</td>
+               <td>{{res.openning }}</td>
+               <td>{{res.closing }}</td>
+           </tr>
+        {% endfor %}
+
+    </table>
   </div>
 </div>
 {% endblock %}
