@@ -7,11 +7,15 @@ from django.db import IntegrityError
 
 def home(request):
     if 'Person_id' in request.session:
-        return render(request,'foodpandauth/home.html')
+        return redirect('homelocation')
     else:
         return redirect('loginuser')
 
 def signupuser(request):
+    adress = {'latitude':request.ipinfo.latitude,
+              'longitude':request.ipinfo.longitude,
+              'postal':request.ipinfo.postal,
+              'city':request.ipinfo.city}
     if (request.method == 'GET'):
         return render(request, 'foodpandauth/signup.html',{'form':UserCreationForm()})
     else :
@@ -22,9 +26,7 @@ def signupuser(request):
             countsql = "SELECT COUNT(*) FROM PERSON"
             cursor.execute(countsql)
             result = cursor.fetchall()
-            for r in result:
-                count_id = r[0]
-            count_id = count_id + 1
+            count_id = result[0][0] + 1
             sql = "INSERT INTO PERSON(PERSON_ID, EMAIL, PASSWORD, REGISTRATION_DATE) VALUES ('"
             sql += str(count_id)
             sql += "','"
@@ -66,7 +68,7 @@ def loginuser(request):
                 name = r[1]
             request.session['Person_id'] = str(person_id)
             request.session['name'] = name
-            return redirect('home')
+            return redirect('homelocation')
 
 
 def logoutuser(request):
@@ -110,6 +112,6 @@ def updateProfile(request):
             sql += request.session['Person_id']
             request.session['name'] = first_name
             cursor.execute(sql)
-            return redirect('home')
+            return redirect('homelocation')
     else:
         return render(request,'foodpandauth/updateprofile.html',{'error':'log in first'})

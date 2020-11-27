@@ -59,3 +59,16 @@ button.searchButton {
   width: 15%;
   height: 40px;
 }
+.allfoods {
+  width: 100%;
+}
+.foods {
+  float: left;
+  width: 80%;
+}
+.busket {
+  float: right bottom;
+}
+ol.ol-cart-list {
+  list-style-type: decimal;
+}

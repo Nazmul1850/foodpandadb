@@ -33,18 +33,19 @@ urlpatterns = [
     path('reviews/', food_view.reviews, name='reviews'),
     path('customer_promo/', food_view.customer_promo, name='customer_promo'),
     path('orderd_items/', food_view.orderd_items, name='orderd_items'),
-    path('menu/', food_view.menu, name='menu'),
 
 
 
 # NOTE: Authenticate
   path('signupuser/', auth_view.signupuser, name='signupuser'),
   path('loginuser/',auth_view.loginuser, name='loginuser'),
-  path('',auth_view.home,name='home'),
+  path('home/',auth_view.home,name='home'),
   path('logoutuser/',auth_view.logoutuser, name='logoutuser'),
   path('updateProfile/',auth_view.updateProfile, name='updateProfile'),
 
   # NOTE: homemodule
-  path('home/',home_view.home, name="homelocation"),
+  path('',home_view.home, name="homelocation"),
   # path('res/',home_view.showRestaurant, name="showRestaurant"),
+  path('confirmOrder/',home_view.confirmOrder,name='confirmOrder'),
+  path('check/',home_view.check,name="check"),
 ]

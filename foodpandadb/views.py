@@ -13,9 +13,7 @@ def  list_person (request):
     if 'Person_id' in request.session:
         cursor = connection.cursor()
         id = request.session['Person_id']
-        sql = "SELECT * FROM PERSON WHERE PERSON_ID = '"
-        sql += id
-        sql += "'"
+        sql = "SELECT * FROM PERSON"
         cursor.execute(sql)
         result = cursor.fetchall()
         dict_result = []
@@ -63,10 +61,10 @@ def  food (request):
     result = cursor.fetchall()
     dict_result = []
     for r in result:
-        name = r[0]
-        cuisine = r[1]
-        price = r[2]
-        availability = r[3]
+        name = r[1]
+        cuisine = r[2]
+        price = r[3]
+        availability = r[4]
         row = {'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability}
         dict_result.append(row)
     return render(request,'foodpanda/foods.html',{'foods' : dict_result})
@@ -206,16 +204,3 @@ def  orderd_items (request):
         row = {'order_id':order_id, 'food_id':food_id}
         dict_result.append(row)
     return render(request,'foodpanda/orderd_items.html',{'orderd_items' : dict_result})
-
-def  menu (request):
-    cursor = connection.cursor()
-    sql = "SELECT * FROM MENU"
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    dict_result = []
-    for r in result:
-        resaurant_id = r[0]
-        food_id = r[1]
-        row = {'resaurant_id':resaurant_id, 'food_id':food_id}
-        dict_result.append(row)
-    return render(request,'foodpanda/menu.html',{'menu' : dict_result})
