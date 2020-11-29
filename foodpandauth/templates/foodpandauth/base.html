@@ -40,7 +40,7 @@
         <ul class="navbar-nav ml-auto">
           {% if 'Person_id' in request.session %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'dbhome' %}">Admin</a>
+            <a class="nav-link" href="{% url 'myorders' %}">My Orders</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'updateProfile' %}">Profile</a>
@@ -69,6 +69,11 @@
 <div class="container">
   {% block content %}{% endblock %}
 </div>
+ <div class="footer-order">
+   {% if 'order_id' in request.session %}
+    <p>Order Is Ongoing</p>
+   {% endif %}
+ </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

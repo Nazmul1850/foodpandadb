@@ -16,7 +16,7 @@ def home(request):
                   'country':request.ipinfo.country}
         if (request.method == 'GET'):
             cursor = connection.cursor()
-            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID = ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
+            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
             sql += str(request.ipinfo.longitude)
             sql += ")*1000 BETWEEN -5 AND 5) AND ((LATITUDE - "
             sql += str(request.ipinfo.latitude)
@@ -50,7 +50,7 @@ def home(request):
                 cuisine = r[2]
                 price = r[3]
                 avl = r[4]
-                row = {'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl}
+                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl}
                 try:
                     dict_result[cuisine].append(row)
                 except Exception as e:
@@ -62,8 +62,8 @@ def home(request):
         return redirect('loginuser')
 
 def check(request):
-    test = request.GET.get('text')
-    print(test)
+    if 'order_id' in request.session:
+        del request.session['order_id']
     return redirect('loginuser')
 
 
@@ -76,22 +76,54 @@ def confirmOrder(request):
             result = cursor.fetchall()
             order_id = result[0][0] + 1
             print(order_id)
-            sql = "INSERT INTO ORDERS(ORDER_ID,STAR_TIME,CUSTOMER_ID,STATUS) VALUES ("
+            request.session['order_id'] = str(order_id)
+            sql = "INSERT INTO ORDERS(ORDER_ID,STAR_TIME,PERSON_ID,STATUS,DELIVERY_MAN_ID) VALUES ("
             sql += str(order_id) + ","
             sql += "SYSDATE,"
             sql += request.session['Person_id'] + ","
-            sql += "'PENDING')"
+            sql += "'PENDING', 1)"
             #print(sql)
             cursor.execute(sql)
             foodids = request.POST['foodids']
             foodlist = foodids.split()
+            print(foodlist)
             for i in range(int(len(foodlist)/2)):
                 sqlo = "INSERT INTO ORDERED_ITEMS(ORDER_ID,FOOD_ID,AMOUNT) VALUES ("
                 sqlo += str(order_id) + ","
                 sqlo += foodlist[2*i] + "," + foodlist[2*i + 1] + ")"
                 cursor.execute(sqlo)
-            return redirect('homelocation');
+            return redirect('homelocation')
         else:
-            return render(request,'homemodule/confirmOrder.html')
+            if 'order_id' in request.session:
+                print(request.session.keys())
+                cursor = connection.cursor()
+                sql = "SELECT STATUS FROM ORDERS WHERE ORDER_ID = " + request.session['order_id']
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                print(result)
+                return render(request,'homemodule/confirmOrder.html',{'orderON':'Order Is Ongoing..Please Wait...'})
+            else:
+                print('No Order')
+                return render(request,'homemodule/confirmOrder.html')
     else:
         return redirect('loginuser')
+
+
+def myorders(request):
+    cursor = connection.cursor()
+    sql = "SELECT ORDER_ID, START_TIME, DELIVERY_TIME, DELIVERY_MAN_ID, STATUS FROM ORDERS WHERE PERSON_ID = " + request.session['Person_id']
+    sql += "ORDER BY STATUS DESC"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    dict_result = []
+    for r in result:
+        order_id = r[0]
+        start_time = r[1]
+        delivery_time = r[2]
+        delivery_man_id = r[3]
+        status = r[4]
+        row = {'order_id':order_id,'start_time':start_time,
+               'delivery_time':delivery_time, 'delivery_man_id':delivery_man_id,
+                'status':status}
+        dict_result.append(row)
+    return render(request,'homemodule/myorders.html',{'orders':dict_result})

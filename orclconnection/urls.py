@@ -48,4 +48,5 @@ urlpatterns = [
   # path('res/',home_view.showRestaurant, name="showRestaurant"),
   path('confirmOrder/',home_view.confirmOrder,name='confirmOrder'),
   path('check/',home_view.check,name="check"),
+  path('myorders/',home_view.myorders,name="myorders"),
 ]

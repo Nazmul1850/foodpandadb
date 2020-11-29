@@ -2,12 +2,17 @@
 {% block content %}
 {% load static %}
 <script src="{% static 'homemodule/js/confirmCart.js' %}"> </script>
+
+{% if orderON %}
+{{ orderON }}
+{% else %}
 <div id="confirm-cart" class="confirm-cart">
   <ol id="ol-confirm-cart" class="ol-confirm-cart">
     <div id="total-confirm" class="total-confirm"></div>
   </ol>
 </div>
 <div class="confirm-system">
-  <button type="button" id="confirm-button" class="btn btn-info btn-md" onclick="{% url 'check' %}">Confirm Order</button>
+  <button type="button" id="confirm-button" class="btn btn-info btn-md">Confirm Order</button>
 </div>
+{% endif %}
 {% endblock %}
