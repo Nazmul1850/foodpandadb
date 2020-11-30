@@ -1,4 +1,4 @@
-var totalprice = 0;
+
 var foodlist = [];
 var btnclick;
 
@@ -27,29 +27,53 @@ class FoodCart {
 // NOTE: update foodlist from session data
 $(document).ready(function(){
   var memory = JSON.parse(sessionStorage.getItem("foodlist"));
-  console.log(memory);
   for(m in memory) {
     //console.log(memory[m].name);
     foodlist.push(new FoodCart(memory[m].id,memory[m].name,memory[m].price,memory[m].amount));
-    totalprice += memory[m].price;
   }
 });
 
+
 // NOTE: make new food item
+function checkRes(res_name,id, name, price) {
+  console.log(foodlist.length);
+  if (sessionStorage.getItem("res_name") == null || (foodlist.length == 0)) {
+    sessionStorage.setItem("res_name",res_name);
+    foodObject(id,name,price);
+    const res_check = document.getElementById('res-check');
+    res_check.innerHTML = `
+    `;
+    //console.log("Notun res");
+  }
+  else {
+    var pre_res = sessionStorage.getItem("res_name");
+    //console.log("pre_res->" + pre_res);
+    if (res_name == pre_res) {
+      foodObject(id,name,price);
+      //console.log("Milse");
+    }
+    else {
+      //console.log("mile nai");
+      const res_check = document.getElementById('res-check');
+      res_check.innerHTML = `
+        <span> Please Order From a Single Restaurant Or Clear your cart..</span>
+      `;
+    }
+  }
+}
+
 function foodObject(id, name, price) {
   var amountcheck = 0;
   for(const cart of foodlist) {
     if (cart.id == id) {
       console.log("increased");
       cart.increaseAmount();
-      totalprice += price;
       amountcheck =1;
       break;
     }
   }
   if (amountcheck == 0) {
     foodlist.push(new FoodCart(id,name,price,1));
-    totalprice += price;
   }
 }
 // NOTE: Delete a item
@@ -58,12 +82,10 @@ function deleteCart(id){
   foodlist.forEach((item, i, object) => {
     if(item.id == id ) {
       if(item.amount==1){
-        totalprice -= item.price;
         object.splice(i,1);
       }
       else{
         item.decreaseAmount();
-        totalprice -= item.price;
       }
     }
     //btnclick.updateol.call();
@@ -84,9 +106,11 @@ $(document).ready(function() {
       //console.log(items[i]);
       items[i].parentNode.removeChild(items[i]);
     }
+    var total = 0;
     for (const cart of foodlist) {
         const cartitem = document.createElement('li');
         cartitem.classname = 'cart-item';
+        total += cart.amount * cart.price
         //console.log(cart.name);
         cartitem.innerHTML = `
         <div class="cartitem-content">
@@ -99,7 +123,7 @@ $(document).ready(function() {
     }
     const cost = document.getElementById('total-price');
     cost.innerHTML = `
-        <span>Total :${totalprice}</span>
+        <span>Total :${total}</span>
     `;
     cartlist.append(cost);
     renderHook.append(cartlist);

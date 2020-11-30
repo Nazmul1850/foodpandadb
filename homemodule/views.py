@@ -16,7 +16,7 @@ def home(request):
                   'country':request.ipinfo.country}
         if (request.method == 'GET'):
             cursor = connection.cursor()
-            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
+            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
             sql += str(request.ipinfo.longitude)
             sql += ")*1000 BETWEEN -5 AND 5) AND ((LATITUDE - "
             sql += str(request.ipinfo.latitude)
@@ -31,7 +31,8 @@ def home(request):
                 phone = r[2]
                 openning = r[3]
                 closing = r[4]
-                row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing}
+                image = r[5]
+                row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image}
                 dict_result.append(row)
             return render(request,'homemodule/home.html',{'address':adress,'restaurant':dict_result})
         else:
@@ -43,7 +44,6 @@ def home(request):
             cursor.execute(sql)
             result = cursor.fetchall()
             dict_result = {}
-            request.session['foodID'] = ""
             for r in result:
                 id = r[0]
                 name = r[1]
@@ -77,7 +77,7 @@ def confirmOrder(request):
             order_id = result[0][0] + 1
             print(order_id)
             request.session['order_id'] = str(order_id)
-            sql = "INSERT INTO ORDERS(ORDER_ID,STAR_TIME,PERSON_ID,STATUS,DELIVERY_MAN_ID) VALUES ("
+            sql = "INSERT INTO ORDERS(ORDER_ID,START_TIME,PERSON_ID,STATUS,DELIVERY_MAN_ID) VALUES ("
             sql += str(order_id) + ","
             sql += "SYSDATE,"
             sql += request.session['Person_id'] + ","

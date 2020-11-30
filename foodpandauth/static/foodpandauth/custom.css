@@ -22,11 +22,11 @@ body {
         font-size: 5rem;
     }
 }
-div.header {
+/* div.header {
   text-align: center;
   width: 100%;
   background-color: bisque;
-}
+} */
 div.tablebuttons {
   padding: 10px;
   display: flex;
@@ -59,6 +59,8 @@ button.searchButton {
   width: 15%;
   height: 40px;
 }
+
+/* NOTE: Cart items */
 .allfoods {
   width: 100%;
 }
@@ -71,4 +73,13 @@ button.searchButton {
 }
 ol.ol-cart-list {
   list-style-type: decimal;
+}
+div.res-check {
+  background-color: red;
+}
+
+/* NOTE: Home Pic */
+img.res-home-pic {
+  width: 100px;
+  height:100px;
 }

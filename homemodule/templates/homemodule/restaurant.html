@@ -14,7 +14,10 @@
            <li><h3>{{foods.name}}</h3></li>
            <li>{{foods.price}}</li>
            <li>
-             <button type="button" name="plus" class="plus" onclick="foodObject({{foods.id}},'{{foods.name}}',{{foods.price}})">Add To Cart</button>
+             <button type="button" name="plus" class="plus"
+               onclick="checkRes('{{foods.res_name}}',{{foods.id}},'{{foods.name}}',{{foods.price}})">
+               Add To Cart
+            </button>
            </li>
         </ul>
         {% endfor %}
@@ -30,6 +33,7 @@
     <div id="showcart">
       <ol id="ol-cart-list" class="ol-cart-list">
         <div id="total-price" class="total-price"></div>
+        <div id="res-check" class="res-check"></div>
       </ol>
     </div>
      <a href="{% url 'confirmOrder' %}" id="check-out" class= "button">Check Out</a>

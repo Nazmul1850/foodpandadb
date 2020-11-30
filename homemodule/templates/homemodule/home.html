@@ -13,6 +13,7 @@
             <th>PHONE</th>
             <th>OPENNING</th>
             <th>CLOSING</th>
+            <th>IMAGE</th>
         </tr>
         {% for res in restaurant %}
            <tr>
@@ -23,6 +24,7 @@
                <td>{{res.phone }}</td>
                <td>{{res.openning }}</td>
                <td>{{res.closing }}</td>
+               <td><img class="res-home-pic"src="{{res.image}}" alt="Res_image"></td>
            </tr>
         {% endfor %}
 

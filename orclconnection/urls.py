@@ -16,16 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import foodpandadb.views as food_view
+import foodpandadb.apiViews as db_view
 import foodpandauth.views as auth_view
 import homemodule.views as home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dbhome/',food_view.home,name="dbhome"),
+    path('foodpandadmin/',food_view.foodpandadmin,name="foodpandadmin"),
+    path('loginadmin/',food_view.loginadmin, name='loginadmin'),
+    path('logoutadmin/',food_view.logoutadmin, name='logoutadmin'),
+
+    path('saverestaurant/',db_view.saverestaurant, name="saverestaurant"),
+    path('addnewrestaurant/',db_view.addnewrestaurant, name="addnewrestaurant"),
+
     path('persons/', food_view.list_person, name='persons'),
-    path('locations/', food_view.locations, name='locations'),
     path('food/', food_view.food, name='food'),
     path('restaurant/', food_view.restaurant, name='restaurant'),
+    path('locations/', food_view.locations, name='locations'),
     path('orders/', food_view.orders, name='orders'),
     path('promos/', food_view.promos, name='promos'),
     path('payments/', food_view.payments, name='payments'),

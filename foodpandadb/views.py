@@ -1,18 +1,54 @@
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.forms import AuthenticationForm
 # Create your views here.
-from django.shortcuts import render
 #from .models import Job
 from django.db import connection
 
 # Create your views here.
-def home(request):
-    return render(request,'foodpanda/home.html')
+def foodpandadmin(request):
+    if 'Admin_id' in request.session:
+        return render(request,'foodpanda/home.html')
+    else:
+        return redirect('loginadmin')
+def loginadmin(request):
+    if (request.method == 'GET'):
+        return render(request,'foodpanda/loginadmin.html',{'form':AuthenticationForm()})
+    else:
+        cursor = connection.cursor()
+        username = request.POST['username']
+        password = request.POST['password']
+        sql = "SELECT ADMIN_ID, ADMIN_NAME FROM ADMIN WHERE ADMIN_NAME = "
+        sql += "'"
+        sql += username
+        sql += "'"
+        sql += "AND ADMIN_PASSWORD = "
+        sql += "'"
+        sql += password
+        sql += "'"
+        print(sql)
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        if not bool(result):
+            return render(request, 'foodpanda/loginadmin.html',{'form':AuthenticationForm(), 'error':'Email or Password is Wrong'})
+        else:
+            for r in result:
+                admin_id = r[0]
+                name = r[1]
+            request.session['Admin_id'] = str(admin_id)
+            request.session['Admin_name'] = name
+            return redirect('foodpandadmin')
+def logoutadmin(request):
+    try:
+        del request.session['Admin_id']
+        del request.session['Admin_name']
+    except KeyError:
+        pass
+    return redirect('loginadmin')
+
 
 def  list_person (request):
-    if 'Person_id' in request.session:
+    if 'Admin_id' in request.session:
         cursor = connection.cursor()
-        id = request.session['Person_id']
         sql = "SELECT * FROM PERSON"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -33,26 +69,9 @@ def  list_person (request):
             dict_result.append(row)
         return render(request,'foodpanda/persons.html',{'persons' : dict_result})
     else:
-        return redirect('loginuser')
+        return redirect('loginadmin')
 
 
-def  locations (request):
-    if 'Person_id' in request.session:
-        cursor = connection.cursor()
-        sql = "SELECT * FROM LOCATION"
-        cursor.execute(sql)
-        result = cursor.fetchall()
-        dict_result = []
-        for r in result:
-            longitude = r[1]
-            latitude = r[2]
-            city = r[3]
-            zip_code = r[4]
-            row = {'longitude':longitude,'latitude':latitude, 'city':city, 'zip_code':zip_code}
-            dict_result.append(row)
-        return render(request,'foodpanda/locations.html',{'locations' : dict_result})
-    else:
-        return redirect('loginuser')
 
 def  food (request):
     cursor = connection.cursor()
@@ -70,24 +89,49 @@ def  food (request):
     return render(request,'foodpanda/foods.html',{'foods' : dict_result})
 
 def  restaurant (request):
-    cursor = connection.cursor()
-    sql = "SELECT * FROM RESTAURANT"
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    dict_result = []
-    for r in result:
-        restaurant_id = r[0]
-        name = r[1]
-        location_id = r[2]
-        phone = r[3]
-        email = r[4]
-        openning = r[5]
-        closing = r[6]
-        row = {'restaurant_id':restaurant_id, 'name':name, 'location_id':location_id,
-                'phone':phone, 'email':email, 'openning':openning,
-                'closing':closing}
-        dict_result.append(row)
-    return render(request,'foodpanda/restaurants.html',{'restaurants' : dict_result})
+    if 'Admin_id' in request.session:
+        if request.method == 'GET':
+            cursor = connection.cursor()
+            sql = "SELECT * FROM RESTAURANT ORDER BY RESTAURANT_ID"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            dict_result = []
+            for r in result:
+                restaurant_id = r[0]
+                name = r[1]
+                location_id = r[2]
+                phone = r[3]
+                email = r[4]
+                openning = r[5]
+                closing = r[6]
+                image = r[7]
+                row = {'restaurant_id':restaurant_id, 'name':name, 'location_id':location_id,
+                        'phone':phone, 'email':email, 'openning':openning,
+                        'closing':closing,'image':image}
+                dict_result.append(row)
+            return render(request,'foodpanda/restaurants.html',{'restaurants' : dict_result})
+        else:
+            return redirect('loginadmin')
+    else:
+        return redirect('loginadmin')
+
+def  locations (request):
+    if 'Admin_id' in request.session:
+        cursor = connection.cursor()
+        sql = "SELECT * FROM LOCATION"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        dict_result = []
+        for r in result:
+            longitude = r[1]
+            latitude = r[2]
+            city = r[3]
+            zip_code = r[4]
+            row = {'longitude':longitude,'latitude':latitude, 'city':city, 'zip_code':zip_code}
+            dict_result.append(row)
+        return render(request,'foodpanda/locations.html',{'locations' : dict_result})
+    else:
+        return redirect('loginadmin')
 
 
 def  orders (request):
@@ -98,15 +142,14 @@ def  orders (request):
     dict_result = []
     for r in result:
         order_id = r[0]
-        order_date = r[1]
-        start_time = r[2]
-        delivery_time = r[3]
-        customer_id = r[4]
-        delivery_id = r[5]
-        status = r[6]
-        row = {'order_id':order_id, 'order_date':order_date, 'start_time':start_time,
-                'delivery_time':delivery_time, 'customer_id':customer_id, 'delivery_id':delivery_id,
-                'status':status}
+        start_time = r[1]
+        delivery_time = r[2]
+        delivery_man_id = r[3]
+        status = r[4]
+        person_id = r[5]
+        row = {'order_id':order_id, 'start_time':start_time,
+                'delivery_time':delivery_time,'delivery_man_id':delivery_man_id,
+                'status':status,'person_id':person_id}
         dict_result.append(row)
     return render(request,'foodpanda/orders.html',{'orders' : dict_result})
 

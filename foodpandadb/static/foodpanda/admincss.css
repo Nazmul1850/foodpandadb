@@ -1,0 +1,18 @@
+div.header {
+  text-align: center;
+  width: 100%;
+  background-color: green;
+}
+
+input.new-input-data {
+  width: 100px;
+  height: 10px;
+}
+td.editable {
+  width: 100px;
+  height: 10px;
+}
+img.res-pic {
+  width:200px;
+  height:100px;
+}
