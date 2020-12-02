@@ -1,5 +1,4 @@
 {% extends 'foodpanda/base.html' %}
-{% load static %}
 {% block dbcontent %}
 <div class="tableheader">
   <h1>RESTAURANT</h1>
@@ -25,8 +24,8 @@
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="email">{{res.email}}</td>
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="openning">{{res.openning }}</td>
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="closing">{{res.closing }}</td>
-           <td class="editable" data-id="{{ res.restaurant_id }}" data-type="image"><img class="res-pic" src="{{res.image}}" alt="{% static 'foodpanda/restaurant.jpg'%}"></td>
-           <td><a href="#" class="btn btn-sm btn-danger" onclick="deleteRes()">Delete</a><a class="btn btn-sm btn-success" href="#">Update</a></td>
+           <td class="editable" data-id="{{ res.restaurant_id }}" data-type="image"><img class="res-pic" src="{{res.image}}" alt="Pic not inserted"></td>
+           <td><a href="#" class="btn btn-sm btn-danger" onclick="deleteRes()">Delete</a><a class="btn btn-sm btn-success" href="{% url 'food' %}" onclick="addfood({{res.restaurant_id}})">See Foods</a></td>
        </tr>
     {% endfor %}
     <tr id="new-row">
@@ -37,4 +36,8 @@
     </tr>
 
 </table>
+{% endblock %}
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/admin.js' %}"></script>
 {% endblock %}

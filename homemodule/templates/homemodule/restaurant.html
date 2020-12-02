@@ -2,6 +2,9 @@
 {% block content %}
 {% load static %}
 <script src="{% static 'homemodule/js/cartbox.js' %}"> </script>
+{%if error %}
+{{error}}
+{% else %}
 <div class="allfoods">
   <div class="foods">
     {% if dict_result  %}
@@ -10,6 +13,7 @@
       {% for key,values in dict_result.items %}
         <li><h3>{{key}}</h3>
         {% for foods in values %}
+        {% if foods.status %}
         <ul>
            <li><h3>{{foods.name}}</h3></li>
            <li>{{foods.price}}</li>
@@ -20,6 +24,7 @@
             </button>
            </li>
         </ul>
+        {% endif %}
         {% endfor %}
         </li>
       {% endfor %}
@@ -40,4 +45,5 @@
     </div>
 
 </div>
+{% endif %}
 {% endblock %}

@@ -1,9 +1,19 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
+{% load static %}
+<script src="{% static 'homemodule/js/searchbox.js' %}"> </script>
 <div class="hero-content">
   <div class="searchContent">
-    <input type="text" class="searchbar" name="searchbox" placeholder="Search Nearby Restaurants">
-    <button type="submit"name="search" class="searchButton">Search</button><br>
+    <form id="search-form" method="post">
+      {% csrf_token %}
+      <input type="text" class="searchbar" id="searchbox" name="searchbox" placeholder="Search Nearby Restaurants">
+      <select class="search-select" name="res-filter" id="res-filter">
+        <option value="restaurant">Restaurant</option>
+        <option value="cuisine">Cuisine</option>
+        <option value="price">Price</option>
+      </select>
+      <button type="submit"name="searchButton" class="searchButton">Search</button><br>
+    </form>
     <span>Your current location is ({{address.latitude}},{{address.longitude}}) {{ address.region }}-{{ address.postal }}, {{ address.city }}, {{ address.country }}</span>
   </div>
   <div class="restaurants">
@@ -17,7 +27,7 @@
         </tr>
         {% for res in restaurant %}
            <tr>
-               <td><form method="post">
+               <td><form id="all_res" method="post">
                  {% csrf_token %}
                  <input type="submit" name="res_name" value="{{res.name}}">
                </form></td>

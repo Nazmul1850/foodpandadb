@@ -73,7 +73,6 @@
 <div class="tablebuttons">
     <a role="button" href="{% url 'persons' %}" class="btn">PERSON</a>
     <a role="button" href="{% url 'restaurant' %}" class="btn">RESTAURANT</a>
-    <a role="button" href="{% url 'food' %}" class="btn">FOOD</a>
     <a role="button" href="{% url 'orders' %}" class="btn">ORDER</a>
     <a role="button" href="{% url 'promos' %}" class="btn">PROMO</a>
     <a role="button" href="{% url 'payments' %}" class="btn">PAYMENT</a>
@@ -94,6 +93,6 @@
 
     <script src="{% static 'foodpanda/js/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'foodpanda/js/jquery-ui-1.12.1/jquery-ui.js' %}"></script>
-    <script src="{% static 'foodpanda/js/admin.js' %}"></script>
+    {% block pagescript %}{% endblock %}
   </body>
 </html>

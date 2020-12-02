@@ -1,5 +1,4 @@
 {% extends 'foodpanda/base.html' %}
-{% load static %}
 {% block dbcontent %}
 <div class="tableheader">
   <h1>FOODS</h1>
@@ -13,12 +12,20 @@
     </tr>
     {% for food in foods %}
        <tr>
-           <td>{{food.name}}</td>
-           <td>{{food.cuisine }}</td>
-           <td>{{food.price }}</td>
-           <td>{{food.availability }}</td>
+           <td class="editable" data-id="{{ food.id }}" data-type="name">{{food.name}}</td>
+           <td class="editable" data-id="{{ food.id }}" data-type="cuisine">{{food.cuisine }}</td>
+           <td class="editable" data-id="{{ food.id }}" data-type="price">{{food.price }}</td>
+           <td class="editable" data-id="{{ food.id }}" data-type="avl">{{food.availability }}</td>
        </tr>
     {% endfor %}
-
+    <tr id="new-row-food">
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-success" onclick="addRowFood({{food_res_id.res_id}})">Add</button></td>
+    </tr>
 </table>
+{% endblock %}
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/admin_2.js' %}"></script>
 {% endblock %}

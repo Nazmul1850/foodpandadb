@@ -74,19 +74,26 @@ def  list_person (request):
 
 
 def  food (request):
+    res_id = request.session['res_id']
+    print("on views" + res_id)
     cursor = connection.cursor()
-    sql = "SELECT * FROM FOOD"
+    sql = "SELECT * FROM FOOD WHERE RESTAURANT_ID = '{}'".format(res_id)
+    print(sql)
     cursor.execute(sql)
     result = cursor.fetchall()
+    food_res_id = {'res_id':res_id}
+    print(result)
     dict_result = []
     for r in result:
+        id = r[0]
         name = r[1]
         cuisine = r[2]
         price = r[3]
         availability = r[4]
-        row = {'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability}
+        row = {'id':id, 'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability}
         dict_result.append(row)
-    return render(request,'foodpanda/foods.html',{'foods' : dict_result})
+    return render(request,'foodpanda/foods.html',{'foods' : dict_result,'food_res_id':food_res_id})
+
 
 def  restaurant (request):
     if 'Admin_id' in request.session:

@@ -28,6 +28,9 @@ urlpatterns = [
 
     path('saverestaurant/',db_view.saverestaurant, name="saverestaurant"),
     path('addnewrestaurant/',db_view.addnewrestaurant, name="addnewrestaurant"),
+    path('foodcall/',db_view.foodcall, name="foodcall"),
+    path('addnewfood/',db_view.addnewfood, name="addnewfood"),
+    path('savefood/',db_view.savefood, name="savefood"),
 
     path('persons/', food_view.list_person, name='persons'),
     path('food/', food_view.food, name='food'),

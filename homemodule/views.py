@@ -36,28 +36,75 @@ def home(request):
                 dict_result.append(row)
             return render(request,'homemodule/home.html',{'address':adress,'restaurant':dict_result})
         else:
-            res_name = request.POST['res_name']
+            searchfilter = request.POST.get('res-filter')
+            searchbox = request.POST.get('searchbox')
+            res_name = request.POST.get('res_name')
             cursor = connection.cursor()
-            sql = "SELECT FOOD_ID, NAME,CUISINE,PRICE,AVAILABILTY FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
-            sql += str(res_name)
-            sql += "')"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            dict_result = {}
-            for r in result:
-                id = r[0]
-                name = r[1]
-                cuisine = r[2]
-                price = r[3]
-                avl = r[4]
-                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl}
-                try:
-                    dict_result[cuisine].append(row)
-                except Exception as e:
-                    dict_result[cuisine] = []
-                    dict_result[cuisine].append(row)
-            print(dict_result)
-            return render(request,'homemodule/restaurant.html',{'dict_result':dict_result})
+            if searchfilter and searchbox:
+                search = ""
+                price = 9999
+                if searchfilter == 'price':
+                    price = int(searchbox)
+                else:
+                    search = "%"
+                    for c in searchbox:
+                        search += c
+                        search += '%'
+                print(search)
+                result = ""
+                if searchfilter == 'restaurant':
+                    result = cursor.callfunc('restaurant_ids', str , [search,'',price,'RESTAURANT'])
+                    print(result)
+                elif searchfilter == 'cuisine':
+                    result = cursor.callfunc('restaurant_ids', str , ['',search,price,'CUISINE'])
+                    print(result)
+                else:
+                    result = cursor.callfunc('restaurant_ids', str , ['','',price,'PRICE'])
+                    print(result)
+                sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE FROM RESTAURANT WHERE RESTAURANT_ID IN {}".format(result)
+                print(sql)
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                cursor.close()
+                dict_result = []
+                for r in result:
+                    id = r[0]
+                    name = r[1]
+                    phone = r[2]
+                    openning = r[3]
+                    closing = r[4]
+                    image = r[5]
+                    row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image}
+                    dict_result.append(row)
+                return render(request,'homemodule/home.html',{'address':adress,'restaurant':dict_result})
+            else:
+                if res_name:
+                    cursor = connection.cursor()
+                    sql = "SELECT FOOD_ID, NAME,CUISINE,PRICE,AVAILABILTY FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
+                    sql += str(res_name)
+                    sql += "')"
+                    cursor.execute(sql)
+                    result = cursor.fetchall()
+                    dict_result = {}
+                    for r in result:
+                        id = r[0]
+                        name = r[1]
+                        cuisine = r[2]
+                        price = r[3]
+                        avl = r[4]
+                        if avl == 'y':
+                            row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'status':1}
+                        else:
+                            row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'status':0}
+                        try:
+                            dict_result[cuisine].append(row)
+                        except Exception as e:
+                            dict_result[cuisine] = []
+                            dict_result[cuisine].append(row)
+                    #print(dict_result)
+                    return render(request,'homemodule/restaurant.html',{'dict_result':dict_result})
+                else:
+                    return render(request,'homemodule/restaurant.html',{'error':'Please Fill Up The SearchBox'})
     else:
         return redirect('loginuser')
 
