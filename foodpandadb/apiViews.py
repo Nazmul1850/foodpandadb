@@ -92,6 +92,14 @@ def foodcall(request):
     else:
         request.session['res_id'] = str(res_id)
         return JsonResponse({"success":"Updated"})
+@csrf_exempt
+def offercall(request):
+    res_id = request.POST.get('res_id','')
+    if res_id == '':
+        return JsonResponse({"failure":"nothing"})
+    else:
+        request.session['res_id'] = str(res_id)
+        return JsonResponse({"success":"Updated"})
 
 @csrf_exempt
 def addnewfood(request):
@@ -107,8 +115,27 @@ def addnewfood(request):
     result = cursor.fetchall()
     count_id = result[0][0] + 1
     #print(count_id)
-    sql = "INSERT INTO FOOD VALUES ('{}','{}','{}','{}','{}','{}')".format(count_id,name,cuisine,price,avl,res_id)
+    sql = "INSERT INTO FOOD VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(count_id,name,cuisine,price,avl,res_id,price)
     print(sql)
+    try:
+        cursor.execute(sql)
+        return JsonResponse({"success":"Updated"})
+    except Exception as e:
+        return JsonResponse({"failure":"DatabaseError"})
+
+@csrf_exempt
+def addnewoffer(request):
+    discount_pct=request.POST.get('discount_pct','')
+    max_discount=request.POST.get('max_discount','')
+    expiry=request.POST.get('expiry','')
+    res_id=request.POST.get('res_id','')
+    start=request.POST.get('start','')
+    cursor = connection.cursor()
+    sql = "SELECT COUNT(*) FROM OFFERS"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    count_id = result[0][0] + 1
+    sql = "INSERT INTO OFFERS VALUES ('{}','{}','{}','{}','{}','{}')".format(count_id,discount_pct,max_discount,expiry,res_id,start)
     try:
         cursor.execute(sql)
         return JsonResponse({"success":"Updated"})
@@ -144,10 +171,63 @@ def savefood(request):
         except Exception as e:
             return JsonResponse({"failure":"DatabaseError"})
     if type == 'avl':
-        sql = "UPDATE FOOD SET AVAILABILITY = '{}' WHERE FOOD_ID = '{}'".format(value,id)
+        sql = "UPDATE FOOD SET AVAILABILTY = '{}' WHERE FOOD_ID = '{}'".format(value,id)
+        try:
+            cursor.execute(sql)
+            return JsonResponse({"success":"Updated"})
+        except Exception as e:
+            print(e)
+            return JsonResponse({"failure":"DatabaseError"})
+    return JsonResponse({"success":"Nothing"})
+
+
+@csrf_exempt
+def saveoffer(request):
+    id=request.POST.get('id','')
+    type=request.POST.get('type','')
+    value=request.POST.get('value','')
+    print(id + "->" + type + "->" + value)
+    cursor = connection.cursor()
+    if type == 'dpct':
+        sql = "UPDATE OFFERS SET DISCOUNT_PCT = '{}' WHERE OFFER_ID = '{}'".format(value,id)
+        try:
+            cursor.execute(sql)
+            return JsonResponse({"success":"Updated"})
+        except Exception as e:
+            return JsonResponse({"failure":"DatabaseError"})
+    if type == 'maxd':
+        sql = "UPDATE OFFERS SET MAX_DISCOUNT = '{}' WHERE OFFER_ID = '{}'".format(value,id)
+        try:
+            cursor.execute(sql)
+            return JsonResponse({"success":"Updated"})
+        except Exception as e:
+            return JsonResponse({"failure":"DatabaseError"})
+    if type == 'expd':
+        sql = "UPDATE OFFERS SET EXPIRE_DATE = '{}' WHERE OFFER_ID = '{}'".format(value,id)
+        try:
+            cursor.execute(sql)
+            return JsonResponse({"success":"Updated"})
+        except Exception as e:
+            return JsonResponse({"failure":"DatabaseError"})
+    if type == 'res_id':
+        sql = "UPDATE OFFERS SET RESTAURANT_ID = '{}' WHERE OFFER_ID = '{}'".format(value,id)
+        try:
+            cursor.execute(sql)
+            return JsonResponse({"success":"Updated"})
+        except Exception as e:
+            return JsonResponse({"failure":"DatabaseError"})
+    if type == 'startd':
+        sql = "UPDATE OFFERS SET START_DATE = '{}' WHERE OFFER_ID = '{}'".format(value,id)
         try:
             cursor.execute(sql)
             return JsonResponse({"success":"Updated"})
         except Exception as e:
             return JsonResponse({"failure":"DatabaseError"})
     return JsonResponse({"success":"Nothing"})
+
+@csrf_exempt
+def updateOffer(request):
+    cursor = connection.cursor()
+    cursor.callproc('OFFER_ENDS')
+    print("proc called")
+    return JsonResponse({"success":"Proc Called"})

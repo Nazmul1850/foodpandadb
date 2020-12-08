@@ -80,7 +80,7 @@ def home(request):
             else:
                 if res_name:
                     cursor = connection.cursor()
-                    sql = "SELECT FOOD_ID, NAME,CUISINE,PRICE,AVAILABILTY FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
+                    sql = "SELECT FOOD_ID, NAME,CUISINE,PRICE,AVAILABILTY, OFFER_PRICE FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
                     sql += str(res_name)
                     sql += "')"
                     cursor.execute(sql)
@@ -92,10 +92,14 @@ def home(request):
                         cuisine = r[2]
                         price = r[3]
                         avl = r[4]
-                        if avl == 'y':
-                            row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'status':1}
+                        offer_price = r[5]
+                        if avl == 'y' or avl == 'Y':
+                            if price == offer_price:
+                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':0}
+                            else:
+                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':1}
                         else:
-                            row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'status':0}
+                            continue;
                         try:
                             dict_result[cuisine].append(row)
                         except Exception as e:
@@ -139,19 +143,65 @@ def confirmOrder(request):
                 sqlo += str(order_id) + ","
                 sqlo += foodlist[2*i] + "," + foodlist[2*i + 1] + ")"
                 cursor.execute(sqlo)
-            return redirect('homelocation')
+            return redirect('receiveOrder')
         else:
             if 'order_id' in request.session:
-                print(request.session.keys())
-                cursor = connection.cursor()
-                sql = "SELECT STATUS FROM ORDERS WHERE ORDER_ID = " + request.session['order_id']
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                print(result)
-                return render(request,'homemodule/confirmOrder.html',{'orderON':'Order Is Ongoing..Please Wait...'})
+                return redirect('receiveOrder')
             else:
                 print('No Order')
                 return render(request,'homemodule/confirmOrder.html')
+    else:
+        return redirect('loginuser')
+
+def receiveOrder(request):
+    if 'Person_id' in request.session:
+        if request.method == 'GET':
+            order_id = request.session['order_id']
+            cursor = connection.cursor()
+            total = cursor.callfunc('TOTAL_PRICE', int, [order_id])
+            res_name = cursor.callfunc('res_name', str, [order_id])
+            sql = "SELECT FIRST_NAME FROM PERSON WHERE PERSON_ID = (SELECT PERSON_ID FROM ORDERS WHERE ORDER_ID = {})".format(order_id)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            name = result[0][0]
+            sql = "SELECT NAME,PRICE,FOOD_ID FROM FOOD WHERE FOOD_ID IN ( SELECT FOOD_ID FROM ORDERED_ITEMS WHERE ORDER_ID = {})".format(order_id)
+            cursor.execute(sql)
+            result1 = cursor.fetchall()
+            sql = "SELECT AMOUNT,FOOD_ID FROM ORDERED_ITEMS WHERE	ORDER_ID = {}".format(order_id)
+            cursor.execute(sql)
+            result2 = cursor.fetchall()
+            dict_result = []
+            for r1 in result1:
+                fn = r1[0]
+                price = r1[1]
+                amount = 0
+                for r2 in result2:
+                    if r1[2] == r2[1]:
+                        amount = r2[0]
+                        break
+                row = {'food_name':fn,'price':price,'amount':amount}
+                dict_result.append(row)
+            print(dict_result)
+            orderInfo = {'orderON':'Order is ongoing. Please Wait...','order_id':order_id,'res_name':res_name,'total':total,'name':name}
+            print(orderInfo)
+            return render(request, 'homemodule/receiveOrder.html',{'orderInfo':orderInfo,'order_items':dict_result})
+        else:
+            comment = request.POST['comment']
+            rat = request.POST.get('star')
+            o_id = request.POST.get('order_id')
+            #print(coment + rat + o_id)
+            cursor = connection.cursor()
+            sql = "SELECT COUNT(*) FROM REVIEWS"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            r_id = result[0][0] + 1
+            sql = "INSERT INTO REVIEWS VALUES ('{}','{}','{}','{}')".format(r_id,rat,comment,o_id)
+            print(sql)
+            try:
+                cursor.execute(sql)
+            except Exception as e:
+                print("DatabaseError")
+            return redirect('homelocation')
     else:
         return redirect('loginuser')
 

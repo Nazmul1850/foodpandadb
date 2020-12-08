@@ -25,7 +25,7 @@
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="openning">{{res.openning }}</td>
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="closing">{{res.closing }}</td>
            <td class="editable" data-id="{{ res.restaurant_id }}" data-type="image"><img class="res-pic" src="{{res.image}}" alt="Pic not inserted"></td>
-           <td><a href="#" class="btn btn-sm btn-danger" onclick="deleteRes()">Delete</a><a class="btn btn-sm btn-success" href="{% url 'food' %}" onclick="addfood({{res.restaurant_id}})">See Foods</a></td>
+           <td><a  href="{% url 'offers' %}" class="btn btn-sm btn-info" onclick="addOffers({{res.restaurant_id}})">Offers</a><span> </span><a class="btn btn-sm btn-success" href="{% url 'food' %}" onclick="addfood({{res.restaurant_id}})">Foods</a></td>
        </tr>
     {% endfor %}
     <tr id="new-row">

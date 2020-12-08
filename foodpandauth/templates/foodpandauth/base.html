@@ -11,6 +11,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "foodpandauth/custom.css" %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
@@ -26,7 +27,7 @@
     <nav id="topNav" class="navbar navbar-expand-md navbar-light bg-warning">
   <div class="container">
     <a class="navbar-brand" href="{% url 'homelocation' %}">
-      <img src="{% static "foodpandauth/logo1.png" %}" width="30" height="30" class="d-inline-block align-top" alt="Nazmul's Logo">
+      <img src="{% static "foodpandauth/logo2.png" %}" width="30" height="30" class="d-inline-block align-top" alt="Nazmul's Logo">
       {% if 'Person_id' in request.session %}
       <span>HI, <b>{{ request.session.name }}</b><small> Your FOOD is a door away</small></span>
       {% else %}
@@ -39,14 +40,17 @@
     <div class="collapse navbar-collapse " id="navbarNav">
         <ul class="navbar-nav ml-auto">
           {% if 'Person_id' in request.session %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'myorders' %}">My Orders</a>
+          <li>
+           <a class="nav-link" href="{% url 'myorders' %}"><img src="{% static "foodpandauth/order_icon.png" %}" width="25" height="25" alt="My Order"></a>
+          </li>
+          <li>
+           <a class="nav-link" href="{% url 'myorders' %}"><img src="{% static "foodpandauth/cart.png" %}" width="30" height="30" alt="My Cart"></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'updateProfile' %}">Profile</a>
+            <a class="nav-link" href="{% url 'updateProfile' %}"><img src="{% static "foodpandauth/user_icon.png" %}" width="25" height="25" alt="Profile"></a>
           </li>
           <li class="nav-item">
-            <a href="#" onclick="$('#signOutBtn').click()" class="nav-link">Logout</a>
+            <a href="#" onclick="$('#signOutBtn').click()" class="nav-link"><img src="{% static "foodpandauth/logout_icon.png" %}" width="25" height="23" alt="Profile"></a>
             <form style='display: none;' method="POST" action="{% url 'logoutuser' %}">
               {% csrf_token %}
               <button id="signOutBtn" type="submit">Logout</button>

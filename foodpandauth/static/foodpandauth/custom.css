@@ -83,3 +83,94 @@ img.res-home-pic {
   width: 100px;
   height:100px;
 }
+
+
+/* NOTE: Order Info */
+.order-info {
+  background-color: bisque;
+  position: absolute;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+
+.popup-review {
+  background: rgba(0,0,0,0.6);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.review-content {
+  height: 250px;
+  width: 500px;
+  background: #34282C;
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+}
+button.submit {
+  margin-left: 175px;
+}
+.close {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.stars {
+  position: relative;
+  top: 0;
+  right: 40%;
+  transform: translate(-50%,-50%);
+  transform: rotateY(180deg);
+  display: flex;
+}
+.stars input {
+  display: none;
+}
+.stars label {
+  display: block;
+  cursor: pointer;
+  width: 30px;
+  background: #34282C;
+}
+.stars label:before {
+  content: '\f005';
+  font-family: fontAwesome;
+  position: relative;
+  display: block;
+  font-size: 30px;
+  color: #fff;
+  top: 0;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+.stars label:after {
+  content: '\f005';
+  font-family: fontAwesome;
+  position: absolute;
+  display: block;
+  font-size: 30px;
+  color: #F39A30;
+  top: 0;
+  opacity: 0;
+  transition: 0.5s;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+.stars label:hover:after,
+.stars label:hover ~ label:after,
+.stars input:checked ~ label:after {
+  opacity: 1;
+}

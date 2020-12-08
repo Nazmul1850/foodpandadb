@@ -75,13 +75,15 @@ def  list_person (request):
 
 def  food (request):
     res_id = request.session['res_id']
-    print("on views" + res_id)
     cursor = connection.cursor()
+    sql = "SELECT NAME FROM RESTAURANT WHERE RESTAURANT_ID = '{}'".format(res_id)
+    cursor.execute(sql)
+    name = cursor.fetchall()
+    food_res_id = {'res_id':res_id,'name':name[0][0]}
     sql = "SELECT * FROM FOOD WHERE RESTAURANT_ID = '{}'".format(res_id)
     print(sql)
     cursor.execute(sql)
     result = cursor.fetchall()
-    food_res_id = {'res_id':res_id}
     print(result)
     dict_result = []
     for r in result:
@@ -90,7 +92,8 @@ def  food (request):
         cuisine = r[2]
         price = r[3]
         availability = r[4]
-        row = {'id':id, 'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability}
+        offer_price = r[6]
+        row = {'id':id, 'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability,'offer_price':offer_price}
         dict_result.append(row)
     return render(request,'foodpanda/foods.html',{'foods' : dict_result,'food_res_id':food_res_id})
 
@@ -194,22 +197,26 @@ def  payments (request):
     return render(request,'foodpanda/payments.html',{'payments' : dict_result})
 
 def  offers (request):
+    res_id = request.session['res_id']
     cursor = connection.cursor()
-    sql = "SELECT * FROM OFFERS"
+    sql = "SELECT NAME FROM RESTAURANT WHERE RESTAURANT_ID = '{}'".format(res_id)
+    cursor.execute(sql)
+    name = cursor.fetchall()
+    offer_res_id = {'res_id':res_id,'name':name[0][0]}
+    sql = "SELECT * FROM OFFERS WHERE RESTAURANT_ID = '{}'".format(res_id)
     cursor.execute(sql)
     result = cursor.fetchall()
     dict_result = []
     for r in result:
         offer_id = r[0]
-        food_id = r[1]
-        discount_pct = r[2]
-        max_discount = r[3]
-        expire = r[4]
-        restaurant_id = r[5]
-        row = {'offer_id':offer_id, 'food_id':food_id, 'discount_pct':discount_pct, 'max_discount':max_discount,
-        'expire':expire, 'restaurant_id':restaurant_id}
+        discount_pct = r[1]
+        max_discount = r[2]
+        expire = r[3]
+        start_date = r[5]
+        row = {'offer_id':offer_id,'discount_pct':discount_pct, 'max_discount':max_discount,
+        'expire':expire,'start_date':start_date}
         dict_result.append(row)
-    return render(request,'foodpanda/offers.html',{'offers' : dict_result})
+    return render(request,'foodpanda/offers.html',{'offers' : dict_result,'offer_res_id':offer_res_id})
 
 def  reviews (request):
     cursor = connection.cursor()

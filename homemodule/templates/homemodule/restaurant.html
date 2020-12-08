@@ -13,10 +13,13 @@
       {% for key,values in dict_result.items %}
         <li><h3>{{key}}</h3>
         {% for foods in values %}
-        {% if foods.status %}
         <ul>
            <li><h3>{{foods.name}}</h3></li>
+           {% if foods.status %}
+           <li>{{foods.price}} <span>Offer Price: {{foods.offer_price}}</span> </li>
+           {% else %}
            <li>{{foods.price}}</li>
+           {% endif %}
            <li>
              <button type="button" name="plus" class="plus"
                onclick="checkRes('{{foods.res_name}}',{{foods.id}},'{{foods.name}}',{{foods.price}})">
@@ -24,7 +27,6 @@
             </button>
            </li>
         </ul>
-        {% endif %}
         {% endfor %}
         </li>
       {% endfor %}

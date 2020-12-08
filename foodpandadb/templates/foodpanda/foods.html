@@ -1,7 +1,7 @@
 {% extends 'foodpanda/base.html' %}
 {% block dbcontent %}
 <div class="tableheader">
-  <h1>FOODS</h1>
+  <h1>FOODS FOR {{food_res_id.name}}</h1>
 </div>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
@@ -9,6 +9,7 @@
         <th>CUISINE</th>
         <th>PRICE</th>
         <th>AVAILABILITY</th>
+        <th>OFFER PRICE</th>
     </tr>
     {% for food in foods %}
        <tr>
@@ -16,12 +17,14 @@
            <td class="editable" data-id="{{ food.id }}" data-type="cuisine">{{food.cuisine }}</td>
            <td class="editable" data-id="{{ food.id }}" data-type="price">{{food.price }}</td>
            <td class="editable" data-id="{{ food.id }}" data-type="avl">{{food.availability }}</td>
+           <td class="editable">{{food.offer_price}}</td>
        </tr>
     {% endfor %}
     <tr id="new-row-food">
     </tr>
     <tr>
       <td><button type="button" class="btn btn-success" onclick="addRowFood({{food_res_id.res_id}})">Add</button></td>
+      <td><button type="button" class="btn btn-success" onclick="updateOffer()">Update</button></td>
     </tr>
 </table>
 {% endblock %}

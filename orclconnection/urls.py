@@ -29,8 +29,12 @@ urlpatterns = [
     path('saverestaurant/',db_view.saverestaurant, name="saverestaurant"),
     path('addnewrestaurant/',db_view.addnewrestaurant, name="addnewrestaurant"),
     path('foodcall/',db_view.foodcall, name="foodcall"),
+    path('offercall/',db_view.offercall, name="offercall"),
     path('addnewfood/',db_view.addnewfood, name="addnewfood"),
     path('savefood/',db_view.savefood, name="savefood"),
+    path('addnewoffer/',db_view.addnewoffer, name="addnewoffer"),
+    path('saveoffer/',db_view.saveoffer, name="saveoffer"),
+    path('updateOffer/',db_view.updateOffer, name="updateOffer"),
 
     path('persons/', food_view.list_person, name='persons'),
     path('food/', food_view.food, name='food'),
@@ -59,4 +63,5 @@ urlpatterns = [
   path('confirmOrder/',home_view.confirmOrder,name='confirmOrder'),
   path('check/',home_view.check,name="check"),
   path('myorders/',home_view.myorders,name="myorders"),
+  path('receiveOrder/',home_view.receiveOrder,name="receiveOrder"),
 ]

@@ -52,62 +52,21 @@ $(document).ready(function(){
 
             // NOTE: food
 });
-// $(document).ready(function() {
-//    // Stuff to do as soon as the DOM is ready
-//    $(document).on("dblclick",".editable food",function(){
-//        var value=$(this).text();
-//        var data_type=$(this).data("type");
-//        var input_type="text";
-//        var input="<input type='"+input_type+"' class='input-data-food' value='"+value+"' class='form-control'>";
-//        $(this).html(input);
-//        $(this).removeClass("editable food")
-//    });
-//
-//    $(document).on("blur",".input-data-food",function(){
-//        var value=$(this).val();
-//        var td=$(this).parent("td");
-//        $(this).remove();
-//        td.html(value);
-//        td.addClass("editable food");
-//        var type=td.data("type");
-//        console.log(value);
-//        sendToServer2(td.data("id"),value,type);
-//    });
-//    $(document).on("keypress",".input-data-food",function(e){
-//       var key=e.which;
-//       if(key==13){
-//           var value=$(this).val();
-//           var td=$(this).parent("td");
-//           $(this).remove();
-//           td.html(value);
-//           td.addClass("editable food");
-//           var type=td.data("type");
-//           sendToServer2(td.data("id"),value,type);
-//       }
-//   });
-//
-//   function sendToServer2(id,value,type){
-//        //console.log(id);
-//        console.log(value);
-//        console.log(type);
-//        $.ajax({
-//            url:"http://localhost:8000/savefood/",
-//            type:"POST",
-//            data:{id:id,type:type,value:value},
-//        })
-//        .done(function(response){
-//            console.log(response);
-//        })
-//        .fail(function(){
-//           console.log("Error Occured");
-//        });
-//
-//    }
-// });
 
 
-function deleteRes(id) {
-  alert("Are You Sure You Want To Delete This Restaurant")
+function addOffers(res_id) {
+  //alert("Are You Sure You Want To Delete This Restaurant-->" + res_id)
+  $.ajax({
+      url:"http://localhost:8000/offercall/",
+      type:"POST",
+      data:{res_id:res_id},
+  })
+  .done(function(response){
+      console.log(response);
+  })
+  .fail(function(){
+     console.log("Error Occured");
+  });
 }
 function addfood(res_id) {
   //alert("Add Food" + res_id);

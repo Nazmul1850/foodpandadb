@@ -30,6 +30,8 @@ $(document).ready(function(){
 $(document).ready(function(){
   const renderHook = document.getElementById('confirm-cart');
   const cartlist = document.getElementById('ol-confirm-cart');
+
+
   for (const cart of foodlist) {
       const cartitem = document.createElement('li');
       cartitem.classname = 'confirm-item';
@@ -48,6 +50,8 @@ $(document).ready(function(){
   `;
   cartlist.append(cost);
   renderHook.append(cartlist);
+
+
 
   $(".btn").click(function() {
     //alert("kkkkd");
@@ -70,10 +74,13 @@ $(document).ready(function(){
     form.appendChild(csrfField);
     document.body.appendChild(form);
     form.submit();
-    sessionStorage.setItem("foodlist", "");
+    //sessionStorage.setItem("foodlist", "");
   });
 
 });
+
+
+
 function getString() {
   var foods = "";
   for (const cart of foodlist){

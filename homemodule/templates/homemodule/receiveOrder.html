@@ -1,0 +1,39 @@
+{% extends 'foodpandauth/base.html' %}
+{% block content %}
+{% load static %}
+<script src="{% static 'homemodule/js/receiveOrder.js' %}"> </script>
+
+<div id="order-info" class="order-info">
+  <h3>{{orderInfo.order_id}}</h3>
+  <h3>{{orderInfo.res_name}}</h3>
+  <h3>{{orderInfo.name}}</h3>
+  <ol id="ol-order-info" class="ol-order-info">
+    {% for item in order_items %}
+    <li><b>{{item.food_name}}</b><span> ---- </span>Price:{{item.price}}tk  <span>----</span>  Amount:{{item.amount}}</li>
+    {% endfor %}
+  </ol>
+  <div id="total-order" class="total-order"><h3>Total: {{orderInfo.total}}</h3> </div>
+  <h4>{{orderInfo.orderON}}</h4>
+  <span><small>Click If Order is Rechived</small><br></span>
+  <button type="button" id="order-receive" class="btn btn-success">Received</button>
+</div>
+<div class="popup-review">
+  <div class="review-content">
+    <img src="{% static 'foodpandauth/close.png' %}" alt="close" class="close" id="close">
+    <form id="review-form" method="post">
+      {% csrf_token %}
+      <div class="stars">
+        <input type="radio" name="star" id="star1" value="5"><label for="star1"></label>
+        <input type="radio" name="star" id="star2" value="4"><label for="star2"></label>
+        <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+        <input type="radio" name="star" id="star4" value="2"><label for="star4"></label>
+        <input type="radio" name="star" id="star5" value="1"><label for="star5"></label>
+      </div>
+      <textarea name="comment" rows="4" cols="55" placeholder="Please Comment to Improve"></textarea>
+      <input type="hidden" name="order_id" value="{{orderInfo.order_id}}">
+      <button type="submit" class="submit btn btn-info btn-sm">Submit</button>
+      <button type="button" class="btn btn-info btn-sm"><a href="{% url 'homelocation' %}"></a>Skip</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

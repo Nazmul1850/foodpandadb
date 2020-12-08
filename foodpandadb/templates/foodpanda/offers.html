@@ -2,27 +2,34 @@
 {% load static %}
 {% block dbcontent %}
 <div class="tableheader">
-  <h1>OFFERS</h1>
+  <h1>OFFERS FOR {{offer_res_id.name}}</h1>
 </div>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th> OFFER ID </th>
-        <th>FOOD ID</th>
         <th>DISCOUNT PCT</th>
         <th>MAX DISCOUNT</th>
         <th>EXPIRE DATE ID</th>
-        <th>RESTAURANT ID</th>
+        <th>START DATE</th>
     </tr>
     {% for offer in offers %}
        <tr>
-           <td>{{offer.offer_id}}</td>
-           <td>{{offer.food_id }}</td>
-           <td>{{offer.discount_pct }}</td>
-           <td>{{offer.max_discount }}</td>
-           <td>{{offer.expire}}</td>
-           <td>{{offer.restaurant_id}}</td>
+           <td class="editable" data-id="{{ offer.offer_id }}" data-type="dpct">{{offer.discount_pct }}</td>
+           <td class="editable" data-id="{{ offer.offer_id }}" data-type="maxd">{{offer.max_discount }}</td>
+           <td class="editable-d" data-id="{{ offer.offer_id }}" data-type="expd">{{offer.expire}}</td>
+           <td class="editable-d" data-id="{{ offer.offer_id }}" data-type="startd">{{offer.start_date}}</td>
        </tr>
     {% endfor %}
+    <tr id="new-row-offer">
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-success" onclick="addRowOffer({{offer_res_id.res_id}})">Add</button></td>
+
+    </tr>
 
 </table>
+{% endblock %}
+
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/offer.js' %}"></script>
 {% endblock %}
