@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 # Create your views here.
 #from .models import Job
 from django.db import connection
+import hashlib;
 
 # Create your views here.
 def foodpandadmin(request):
@@ -17,6 +18,8 @@ def loginadmin(request):
         cursor = connection.cursor()
         username = request.POST['username']
         password = request.POST['password']
+        # password = password.encode()
+        # password = hashlib.sha256(password).hexdigest()
         sql = "SELECT ADMIN_ID, ADMIN_NAME FROM ADMIN WHERE ADMIN_NAME = "
         sql += "'"
         sql += username
@@ -64,7 +67,7 @@ def  list_person (request):
             birthdate = r[7]
             regi_date = r[8]
             row = {'person_id':person_id, 'first_name':first_name, 'last_name':last_name,
-                    'gender':gender, 'email':email, 'password':password,
+                    'gender':gender, 'email':email,
                     'phone':phone, 'birthdate':birthdate, 'regi_date':regi_date}
             dict_result.append(row)
         return render(request,'foodpanda/persons.html',{'persons' : dict_result})
@@ -75,6 +78,7 @@ def  list_person (request):
 
 def  food (request):
     res_id = request.session['res_id']
+    print(res_id)
     cursor = connection.cursor()
     sql = "SELECT NAME FROM RESTAURANT WHERE RESTAURANT_ID = '{}'".format(res_id)
     cursor.execute(sql)
@@ -93,7 +97,8 @@ def  food (request):
         price = r[3]
         availability = r[4]
         offer_price = r[6]
-        row = {'id':id, 'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability,'offer_price':offer_price}
+        image = r[7]
+        row = {'id':id, 'name':name, 'cuisine':cuisine, 'price':price, 'availability':availability,'offer_price':offer_price,'image':image}
         dict_result.append(row)
     return render(request,'foodpanda/foods.html',{'foods' : dict_result,'food_res_id':food_res_id})
 
@@ -102,7 +107,7 @@ def  restaurant (request):
     if 'Admin_id' in request.session:
         if request.method == 'GET':
             cursor = connection.cursor()
-            sql = "SELECT * FROM RESTAURANT ORDER BY RESTAURANT_ID"
+            sql = "SELECT R.RESTAURANT_ID, R.NAME, (L.LONGITUDE || ','||L.LATITUDE) AS LOCATION, R.PHONE_NO,R.EMAIL,R.OPENING,R.CLOSING,R.IMAGE FROM RESTAURANT R JOIN LOCATION L ON (R.LOCATION_ID = L.LOCATION_ID) ORDER BY RESTAURANT_ID"
             cursor.execute(sql)
             result = cursor.fetchall()
             dict_result = []
@@ -156,10 +161,12 @@ def  orders (request):
         delivery_time = r[2]
         delivery_man_id = r[3]
         status = r[4]
-        person_id = r[5]
+        person = cursor.callfunc('PERSON_NAME',str,[order_id])
+        promo = r[6]
+        cost = r[7]
         row = {'order_id':order_id, 'start_time':start_time,
                 'delivery_time':delivery_time,'delivery_man_id':delivery_man_id,
-                'status':status,'person_id':person_id}
+                'status':status,'person':person,'promo':promo,'cost':cost}
         dict_result.append(row)
     return render(request,'foodpanda/orders.html',{'orders' : dict_result})
 
@@ -220,44 +227,35 @@ def  offers (request):
 
 def  reviews (request):
     cursor = connection.cursor()
-    sql = "SELECT * FROM REVIEWS"
+    sql = "SELECT RES.NAME, REV.RATING, REV.DESCRIPTION, REV.ORDER_ID FROM REVIEWS REV JOIN RESTAURANT RES ON (RES.RESTAURANT_ID = REV.RESTAURANT_ID) ORDER BY RES.NAME "
     cursor.execute(sql)
     result = cursor.fetchall()
     dict_result = []
     for r in result:
-        review_id = r[0]
+        res_name = r[0]
         rating = r[1]
         description = r[2]
-        food_id = r[3]
-        customer_id = r[4]
-        order_id = r[5]
-        row = {'review_id':review_id, 'rating':rating, 'description':description, 'food_id':food_id,
-        'customer_id':customer_id, 'order_id':order_id}
+        order_id = r[3]
+        person = cursor.callfunc('PERSON_NAME',str,[order_id])
+        row = {'res_name':res_name, 'rating':rating, 'description':description,'order_id':order_id,'person':person}
         dict_result.append(row)
     return render(request,'foodpanda/reviews.html',{'reviews' : dict_result})
 
 def  customer_promo (request):
+    per_promo = request.session['per_promo']
+    print(per_promo)
+    person = {'id':per_promo}
     cursor = connection.cursor()
-    sql = "SELECT * FROM CUSTOMER_PROMO"
+    sql = "SELECT P.CODE,P.DISCOUNT_PCT,P.START_TIME,P.END_TIME,P.STATUS FROM PROMO P JOIN CUSTOMER_PROMO C ON (P.CODE = C.PROMO_CODE) WHERE C.PERSON_ID = {}".format(per_promo)
     cursor.execute(sql)
     result = cursor.fetchall()
     dict_result = []
     for r in result:
-        customer_id = r[0]
-        promo_code = r[1]
-        row = {'customer_id':customer_id, 'promo_code':promo_code}
+        code = r[0]
+        discount_pct = r[1]
+        start = r[2]
+        end = r[3]
+        status = r[4]
+        row = {'code':code, 'discount_pct':discount_pct, 'start':start, 'end':end, 'status':status}
         dict_result.append(row)
-    return render(request,'foodpanda/customer_promo.html',{'customer_promo' : dict_result})
-
-def  orderd_items (request):
-    cursor = connection.cursor()
-    sql = "SELECT * FROM ORDERED_ITEMS"
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    dict_result = []
-    for r in result:
-        order_id = r[0]
-        food_id = r[1]
-        row = {'order_id':order_id, 'food_id':food_id}
-        dict_result.append(row)
-    return render(request,'foodpanda/orderd_items.html',{'orderd_items' : dict_result})
+    return render(request,'foodpanda/customer_promo.html',{'customer_promo' : dict_result,'person':person})

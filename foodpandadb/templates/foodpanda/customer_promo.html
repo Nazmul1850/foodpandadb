@@ -2,18 +2,35 @@
 {% load static %}
 {% block dbcontent %}
 <div class="tableheader">
-  <h1>CUSTOMER PROMO</h1>
+  <h1>PROMOS</h1>
 </div>
 <table width="100%"  border="1">
     <tr style="background-color:lightgray">
-        <th> CUSTOMER ID </th>
-        <th>PROMO CODE</th>
+        <th> CODE </th>
+        <th>DISCPUNT PCT</th>
+        <th>START TIME</th>
+        <th>END TIME</th>
+        <th>STATUS</th>
     </tr>
-    {% for cpromo in customer_promo %}
+    {% for promo in customer_promo %}
        <tr>
-           <td>{{cpromo.customer_id}}</td>
-           <td>{{cpromo.promo_code }}</td>
+           <td>{{promo.code}}</td>
+           <td>{{promo.discount_pct }}</td>
+           <td>{{promo.start }}</td>
+           <td>{{promo.end }}</td>
+           <td>{{promo.status}}</td>
+       </tr>
     {% endfor %}
+    <tr id="new-row-person-promo">
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-success" onclick="addRowPersonPromo({{person.id}})">Add</button></td>
+    </tr>
 
 </table>
+{% endblock %}
+
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/personpromo.js' %}"></script>
 {% endblock %}

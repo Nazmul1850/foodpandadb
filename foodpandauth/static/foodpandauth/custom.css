@@ -1,3 +1,11 @@
+#topNav {
+  background-color: #CBEE85;
+  /* position: -webkit-sticky;
+  position: sticky;
+  top: 0; */
+  z-index: 1000;
+}
+
 .navbar-nav .nav-link {
     color: rgba(0,0,0,1) !important;
 }
@@ -5,9 +13,27 @@
 .navbar-nav .nav-link:hover {
     color: green !important;
 }
-
 body {
-    font-family: 'Itim', cursive;
+  font-family: 'Itim', cursive;
+  /* padding-top: 60px; */
+}
+table {
+  background-color: bisque;
+  opacity: 0.7;
+}
+
+.bg {
+  opacity:1;
+  background-image: url('/static/foodpandauth/body1.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0px;
+  left:0px;
+  z-index:-100;
 }
 
 #blogtitle {
@@ -40,27 +66,252 @@ div.tablebuttons {
   text-align: center;
 }
 /* NOTE: cltr f5 ---> reloads css file */
+/* NOTE: Search Content ============================================================= */
 
 .searchContent {
-  margin: auto;
-  margin-top: 50px;
-  width: 50%;
-  height: 120px;
-  padding: 10px;
-
+  position: absolute;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  margin-top: 100px;
+  top: 10%;
+  left: 30%;
+  transition: translate(-50%,-50%);
+  height: auto;
+  width: 500px;
+  padding: 15px;
+  border-radius: 40px;
+  border-style: solid 2px;
+  border-color: black;
+  background: #D9ECB3;
 }
+/* #6EDDE7 */
 input.searchbar{
-  width: 80%;
+  width: 60%;
   height: 40px;
+  padding: 0;
+  font-size: 16px;
+  transition: 0.4s;
+  line-height: 40px;
+  border-radius: 15px;
+  border-style: solid 2px;
+  border-color: black;
 }
 button.searchButton {
-  background-color: #FFD801;
-  border: 1px solid black;
-  width: 15%;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border-style: solid 2px;
+  border-color: black;
+  float: right;
+  background-color: #D9ECB3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-select {
+  border-radius: 15px;
+  border-style: solid 2px;
+  border-color: black;
 }
 
-/* NOTE: Cart items */
+
+/* NOTE  ------RESTAURANTS------====================================================*/
+.location {
+  text-align: center;
+  margin-top: 10px;
+  text-transform: capitalize;
+}
+.res-property {
+  margin-top: 60px;
+}
+.restaurants {
+  margin-top: 40px;
+}
+
+.col-3 {
+  opacity: 0.7;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: transform .5s ease;
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  background-color: #D9ECB3;
+  float: left;
+  margin-left: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.col-3:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+.res-pic {
+  transition: transform .5s ease;
+}
+.res-pic:hover {
+  transform: scale(1.1);
+}
+.rat {
+  color: grey;
+  font-size: 22px;
+}
+#res-name {
+  text-transform: uppercase;
+}
+#res_button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  margin-bottom: 10px;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+#res_button:hover {
+  opacity: 0.7;
+}
+
+.res-pic {
+  width: 100%;
+  height: 250px;
+  padding: 20px;
+}
+/* NOTE: Single restaurant=--============================================= */
+#food-pic {
+  width: 100px;
+  height: 100px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.cuisine {
+  background-color: #D9ECB3;
+  text-align: center;
+  width: 100%;
+  height: 45px;
+  margin-left: 30px;
+  border-radius: 10px;
+}
+.review {
+  background-color: red;
+  border-radius: 10px;
+  margin:20px;
+  margin-left: 60px;
+  margin-right: 60px;
+  background-color: #D9ECB3;
+  opacity: 0.7;
+  transition: transform .5s ease;
+}
+.review:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+.busket {
+}
+ul {
+  list-style: none;
+}
+li {
+  list-style: none;
+}
+#normal-price {
+  text-decoration: line-through;
+}
+.single-food {
+  background-color: #D9ECB3;
+  margin: 20px;
+  opacity: 0.7;
+  border-radius: 10px;
+  transition: transform .5s ease;
+}
+.single-food:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+ul#all-food-ul {
+}
+.foodlist {
+  width: 1080px;
+}
+.horizontal li {
+  display: inline;
+}
+#food-name {
+  text-transform: uppercase;
+}
+#info {
+  float: right;
+  padding: 10px;
+}
+.food-price {
+  margin-right: 30px;
+}
+#plus {
+  border: none;
+  outline: 0;
+  padding: 5px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+}
+#plus:hover {
+  opacity: 0.7;
+}
+.res-property {
+  background-color: transparent;
+  width: 100%;
+  height: 250px;
+}
+.single-res-prop {
+  padding-top: 20px;
+  text-align: left;
+  padding-left: 280px;
+}
+.name-des {
+  width: inherit;
+  background-color: #D9ECB3;
+  opacity: 0.7;
+  height: 210px;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.single-res-prop h1,h2{
+  color: black;
+  padding-left: 10px;
+  text-transform: uppercase;
+}
+.single-res-pic {
+}
+.single-res-pic img{
+  width: 250px;
+  height: 250px;
+  padding: 20px;
+  position: absolute;
+  top: 30%;
+  left: 20%;
+  float: left;
+  transform: translate(-50%,-50%);
+  z-index: -10;
+}
+/* NOTE: update profile ============================================ ==*/
+.col-md-5 h2 {
+  color: white;
+}
+.form-group label {
+  color: white;
+}
+#updatepro {
+  margin-top: 40px;
+}
+
+/* NOTE: Cart items ======================================================*/
 .allfoods {
   width: 100%;
 }
@@ -68,22 +319,104 @@ button.searchButton {
   float: left;
   width: 80%;
 }
-.busket {
-  float: right bottom;
+.cart-page {
+  background-color: transparent;
+  padding: 10px;
+  text-align: center;
+  width: 80%;
+  height: auto;
+}
+#cartitem-content {
+  margin-left: 50px;
+}
+#cart-name {
+  float: left;
+  padding-top: 5px;
+}
+#cart-amount {
+  padding-top: 20px;
+  }
+#cart-price {
+  padding-top: 20px;
+}
+#cart-option {
+  float: right;
+  padding-right: 10px;
+  padding-top: 5px;
+}
+.cart-button {
+  border-radius: 3px;
+}
+#inc {
+  background-color: green;
+}
+#dec {
+  background-color: red;
+}
+.cartitem-content {
+  background-color: #D9ECB3;
+  height: 40px;
+  margin: 10px;
+  border-radius: 10px;
+}
+#last-option {
+  background-color: #D9ECB3;
+  margin-left: 250px;
+  margin-right: 250px;
+  height: 30px;
+  border-radius: 10px;
+}
+#last-option1 {
+  background-color: #D9ECB3;
+  margin-left: 290px;
+  margin-right: 250px;
+  height: 30px;
+  border-radius: 10px;
+}
+#check-out {
+  text-decoration: none;
 }
 ol.ol-cart-list {
   list-style-type: decimal;
 }
 div.res-check {
-  background-color: red;
 }
 
-/* NOTE: Home Pic */
+/* NOTE: Home Pic ===================================================================*/
 img.res-home-pic {
   width: 100px;
   height:100px;
 }
 
+/* NOTE: PREIOUS ORDERS-================================================================== */
+.see-status {
+  margin-top: 100px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.see-status a {
+  text-decoration: none;
+  color: white;
+}
+
+/* NOTE: CONFIRM ORDER ======================================================= */
+.confirm-order {
+  width: auto;
+  height: auto;
+  margin-left: 200px;
+  margin-right: 200px;
+}
+.confirm-cart {
+  margin-top: 100px;
+  background-color: #D9ECB3;
+  text-align: center;
+  border-radius: 20px;
+}
+.confirm-system {
+  background-color: #D9ECB3;
+  text-align: center;
+  border-radius: 20px;
+}
 
 /* NOTE: Order Info */
 .order-info {
@@ -94,6 +427,7 @@ img.res-home-pic {
   left: 50%;
   transform: translate(-50%,-50%);
   text-align: center;
+  border-radius: 20px;
 }
 
 

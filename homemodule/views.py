@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.db import connection
 from array import array
 import js2py
+import time
+import hashlib;
 
 # Create your views here.
 def home(request):
@@ -16,7 +18,7 @@ def home(request):
                   'country':request.ipinfo.country}
         if (request.method == 'GET'):
             cursor = connection.cursor()
-            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
+            sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE, RATING FROM RESTAURANT WHERE RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - "
             sql += str(request.ipinfo.longitude)
             sql += ")*1000 BETWEEN -5 AND 5) AND ((LATITUDE - "
             sql += str(request.ipinfo.latitude)
@@ -32,7 +34,8 @@ def home(request):
                 openning = r[3]
                 closing = r[4]
                 image = r[5]
-                row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image}
+                rat = r[6]
+                row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image,'rat':rat}
                 dict_result.append(row)
             return render(request,'homemodule/home.html',{'address':adress,'restaurant':dict_result})
         else:
@@ -61,7 +64,7 @@ def home(request):
                 else:
                     result = cursor.callfunc('restaurant_ids', str , ['','',price,'PRICE'])
                     print(result)
-                sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE FROM RESTAURANT WHERE RESTAURANT_ID IN {}".format(result)
+                sql = "SELECT RESTAURANT_ID, NAME, PHONE_NO, OPENING, CLOSING, IMAGE, RATING FROM RESTAURANT WHERE RESTAURANT_ID IN {} AND RESTAURANT.LOCATION_ID IN ( SELECT LOCATION_ID FROM LOCATION WHERE ((LONGITUDE - '{}')*1000 BETWEEN -5 AND 5) AND ((LATITUDE - '{}')*1000 BETWEEN -5 AND 5) )".format(result,request.ipinfo.longitude,request.ipinfo.latitude)
                 print(sql)
                 cursor.execute(sql)
                 result = cursor.fetchall()
@@ -74,13 +77,16 @@ def home(request):
                     openning = r[3]
                     closing = r[4]
                     image = r[5]
-                    row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image}
+                    rat = r[6]
+                    row = {'id':id, 'name':name, 'phone':phone, 'openning':openning, 'closing':closing, 'image':image,'rat':rat}
                     dict_result.append(row)
                 return render(request,'homemodule/home.html',{'address':adress,'restaurant':dict_result})
             else:
                 if res_name:
+                    res_property = {}
+                    res_property= {'name':res_name,'image':'','rat':0,'offer':''}
                     cursor = connection.cursor()
-                    sql = "SELECT FOOD_ID, NAME,CUISINE,PRICE,AVAILABILTY, OFFER_PRICE FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
+                    sql = "SELECT FOOD_ID, NAME, CUISINE, PRICE, AVAILABILTY, OFFER_PRICE, IMAGE FROM FOOD WHERE RESTAURANT_ID = ( SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '"
                     sql += str(res_name)
                     sql += "')"
                     cursor.execute(sql)
@@ -93,11 +99,13 @@ def home(request):
                         price = r[3]
                         avl = r[4]
                         offer_price = r[5]
+                        image = r[6]
                         if avl == 'y' or avl == 'Y':
                             if price == offer_price:
-                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':0}
+                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':0,'image':image}
                             else:
-                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':1}
+                                row = {'res_name':res_name, 'id':id, 'name':name,'cuisine':cuisine,'price':price,'avl':avl,'offer_price':offer_price,'status':1,'image':image}
+                                res_property['offer'] = "present"
                         else:
                             continue;
                         try:
@@ -106,21 +114,44 @@ def home(request):
                             dict_result[cuisine] = []
                             dict_result[cuisine].append(row)
                     #print(dict_result)
-                    return render(request,'homemodule/restaurant.html',{'dict_result':dict_result})
+                    sql = "SELECT REV.ORDER_ID, REV.RATING, REV.DESCRIPTION FROM REVIEWS REV JOIN RESTAURANT RES ON (REV.RESTAURANT_ID = RES.RESTAURANT_ID) WHERE RES.NAME = '{}'".format(res_name)
+                    cursor.execute(sql)
+                    result = cursor.fetchall()
+                    sql = "SELECT IMAGE, RATING FROM RESTAURANT WHERE NAME = '{}'".format(res_name)
+                    cursor.execute(sql)
+                    result1 = cursor.fetchall()
+                    for r in result1:
+                        image = r[0]
+                        rat = r[1]
+                    if not image:
+                        res_property['image'] = "static/homemodule/defaultres.jpg"
+                    else:
+                        res_property['image'] = image
+                    if rat:
+                        res_property['rat'] = rat
+                    reviews = []
+                    for r in result:
+                        order_id = r[0]
+                        rat = r[1]
+                        des = r[2]
+                        name = cursor.callfunc('PERSON_NAME',str,[order_id])
+                        row = {'rat':rat,'des':des,'name':name}
+                        reviews.append(row)
+                    return render(request,'homemodule/restaurant.html',{'dict_result':dict_result,'reviews':reviews,'res_pro':res_property})
                 else:
                     return render(request,'homemodule/restaurant.html',{'error':'Please Fill Up The SearchBox'})
     else:
         return redirect('loginuser')
 
-def check(request):
-    if 'order_id' in request.session:
-        del request.session['order_id']
-    return redirect('loginuser')
+def mycart(request):
+    return render(request,'homemodule/cart.html')
 
 
 def confirmOrder(request):
     if 'Person_id' in request.session:
         if (request.method == 'POST'):
+            promo = request.POST.get('hpromo')
+            print(promo)
             cursor = connection.cursor()
             sqlc = "SELECT COUNT(ORDER_ID) FROM ORDERS"
             cursor.execute(sqlc)
@@ -128,14 +159,10 @@ def confirmOrder(request):
             order_id = result[0][0] + 1
             print(order_id)
             request.session['order_id'] = str(order_id)
-            sql = "INSERT INTO ORDERS(ORDER_ID,START_TIME,PERSON_ID,STATUS,DELIVERY_MAN_ID) VALUES ("
-            sql += str(order_id) + ","
-            sql += "SYSDATE,"
-            sql += request.session['Person_id'] + ","
-            sql += "'PENDING', 1)"
-            #print(sql)
+            sql = "INSERT INTO ORDERS(ORDER_ID,START_TIME,PERSON_ID,STATUS,PROMO_CODE) VALUES ('{}',SYSDATE,'{}','PENDING','{}')".format(order_id,request.session['Person_id'],promo)
+            print(sql)
             cursor.execute(sql)
-            foodids = request.POST['foodids']
+            foodids = request.POST.get('foodids')
             foodlist = foodids.split()
             print(foodlist)
             for i in range(int(len(foodlist)/2)):
@@ -143,59 +170,91 @@ def confirmOrder(request):
                 sqlo += str(order_id) + ","
                 sqlo += foodlist[2*i] + "," + foodlist[2*i + 1] + ")"
                 cursor.execute(sqlo)
+            cursor.callproc('CALCULATE_PRICE',[order_id])
             return redirect('receiveOrder')
         else:
             if 'order_id' in request.session:
                 return redirect('receiveOrder')
             else:
                 print('No Order')
-                return render(request,'homemodule/confirmOrder.html')
+                cursor = connection.cursor()
+                sql = "SELECT P.CODE, P.DISCOUNT_PCT, P.STATUS FROM PROMO P JOIN CUSTOMER_PROMO C ON (P.CODE = C.PROMO_CODE) WHERE P.STATUS = 'RUNNING' AND C.PERSON_ID = {}".format(request.session['Person_id'])
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                print(result)
+                promo = []
+                for r in result:
+                    if r[2]=='RUNNING':
+                        row = {'code':r[0],'discount':r[1],'status':r[2]}
+                        promo.append(row)
+                return render(request,'homemodule/confirmOrder.html',{'promo':promo})
     else:
         return redirect('loginuser')
 
 def receiveOrder(request):
     if 'Person_id' in request.session:
         if request.method == 'GET':
-            order_id = request.session['order_id']
-            cursor = connection.cursor()
-            total = cursor.callfunc('TOTAL_PRICE', int, [order_id])
-            res_name = cursor.callfunc('res_name', str, [order_id])
-            sql = "SELECT FIRST_NAME FROM PERSON WHERE PERSON_ID = (SELECT PERSON_ID FROM ORDERS WHERE ORDER_ID = {})".format(order_id)
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            name = result[0][0]
-            sql = "SELECT NAME,PRICE,FOOD_ID FROM FOOD WHERE FOOD_ID IN ( SELECT FOOD_ID FROM ORDERED_ITEMS WHERE ORDER_ID = {})".format(order_id)
-            cursor.execute(sql)
-            result1 = cursor.fetchall()
-            sql = "SELECT AMOUNT,FOOD_ID FROM ORDERED_ITEMS WHERE	ORDER_ID = {}".format(order_id)
-            cursor.execute(sql)
-            result2 = cursor.fetchall()
-            dict_result = []
-            for r1 in result1:
-                fn = r1[0]
-                price = r1[1]
-                amount = 0
-                for r2 in result2:
-                    if r1[2] == r2[1]:
-                        amount = r2[0]
-                        break
-                row = {'food_name':fn,'price':price,'amount':amount}
-                dict_result.append(row)
-            print(dict_result)
-            orderInfo = {'orderON':'Order is ongoing. Please Wait...','order_id':order_id,'res_name':res_name,'total':total,'name':name}
-            print(orderInfo)
-            return render(request, 'homemodule/receiveOrder.html',{'orderInfo':orderInfo,'order_items':dict_result})
+            if 'order_id' in request.session:
+                order_id = request.session['order_id']
+                print("receice order")
+                print(order_id)
+                cursor = connection.cursor()
+                total = cursor.callfunc('TOTAL_PRICE', int, [order_id])
+                res_name = cursor.callfunc('res_name', str, [order_id])
+                sql = "SELECT FIRST_NAME FROM PERSON WHERE PERSON_ID = (SELECT PERSON_ID FROM ORDERS WHERE ORDER_ID = {})".format(order_id)
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                name = result[0][0]
+                sql = "SELECT NAME,PRICE,FOOD_ID FROM FOOD WHERE FOOD_ID IN ( SELECT FOOD_ID FROM ORDERED_ITEMS WHERE ORDER_ID = {})".format(order_id)
+                cursor.execute(sql)
+                result1 = cursor.fetchall()
+                sql = "SELECT AMOUNT,FOOD_ID FROM ORDERED_ITEMS WHERE	ORDER_ID = {}".format(order_id)
+                cursor.execute(sql)
+                result2 = cursor.fetchall()
+                dict_result = []
+                for r1 in result1:
+                    fn = r1[0]
+                    price = r1[1]
+                    amount = 0
+                    for r2 in result2:
+                        if r1[2] == r2[1]:
+                            amount = r2[0]
+                            break
+                    row = {'food_name':fn,'price':price,'amount':amount}
+                    dict_result.append(row)
+                print(dict_result)
+                orderInfo = {'orderON':'Order is ongoing. Please Wait...','order_id':order_id,'res_name':res_name,'total':total,'name':name}
+                print(orderInfo)
+                delivery = {}
+                sql = "SELECT P.FIRST_NAME, P.PHONE FROM PERSON P JOIN DELIVERY_MAN D ON (P.PERSON_ID = D.PERSON_ID) WHERE DELIVERY_MAN_ID = (SELECT D.DELIVERY_MAN_ID FROM DELIVERY_MAN D JOIN ORDERS O ON (D.DELIVERY_MAN_ID = O.DELIVERY_MAN_ID) WHERE O.ORDER_ID = {})".format(order_id)
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                for r in result:
+                    delivery = {'d_name':r[0],'d_phone':r[1]}
+                print(delivery)
+                return render(request, 'homemodule/receiveOrder.html',{'orderInfo':orderInfo,'order_items':dict_result,'delivery':delivery})
+            else:
+                return render(request, 'homemodule/receiveOrder.html',{'error':'No Order Is Placed Right Now'})
         else:
             comment = request.POST['comment']
             rat = request.POST.get('star')
             o_id = request.POST.get('order_id')
-            #print(coment + rat + o_id)
+            print(comment + rat + str(o_id))
             cursor = connection.cursor()
+            res_name = cursor.callfunc('res_name', str, [o_id])
+            sql = "SELECT RESTAURANT_ID FROM RESTAURANT WHERE NAME = '{}'".format(res_name)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            res_id = result[0][0]
+            print("Res Id")
+            print(res_id)
             sql = "SELECT COUNT(*) FROM REVIEWS"
             cursor.execute(sql)
             result = cursor.fetchall()
             r_id = result[0][0] + 1
-            sql = "INSERT INTO REVIEWS VALUES ('{}','{}','{}','{}')".format(r_id,rat,comment,o_id)
+            print("Review Id")
+            print(r_id)
+            sql = "INSERT INTO REVIEWS VALUES ('{}','{}','{}','{}','{}')".format(r_id,rat,comment,o_id,res_id)
             print(sql)
             try:
                 cursor.execute(sql)
@@ -206,12 +265,19 @@ def receiveOrder(request):
         return redirect('loginuser')
 
 
+def extra(request):
+    password = "12@weW322".encode()
+    password = hashlib.sha256(password).hexdigest()
+    print(password)
+    return HttpResponse('<h1>Checked</h1>')
+
 def myorders(request):
     cursor = connection.cursor()
-    sql = "SELECT ORDER_ID, START_TIME, DELIVERY_TIME, DELIVERY_MAN_ID, STATUS FROM ORDERS WHERE PERSON_ID = " + request.session['Person_id']
-    sql += "ORDER BY STATUS DESC"
+    print(request.session['Person_id'])
+    sql = "SELECT ORDER_ID, START_TIME, DELIVERY_TIME, COST, STATUS FROM ORDERS WHERE PERSON_ID = '{}' ORDER BY STATUS DESC".format(request.session['Person_id'])
     cursor.execute(sql)
     result = cursor.fetchall()
+    print(result)
     dict_result = []
     for r in result:
         order_id = r[0]

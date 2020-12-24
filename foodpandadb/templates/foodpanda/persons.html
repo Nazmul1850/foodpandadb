@@ -12,10 +12,10 @@
         <th>LAST NAME</th>
         <th>GENDER</th>
         <th>EMAIL</th>
-        <th>PASSWORD</th>
         <th>PHONE</th>
         <th>BIRTHDAY</th>
         <th>REGISTRATION DATE</th>
+        <th>PROMO</th>
     </tr>
     {% for person in persons %}
        <tr>
@@ -24,12 +24,16 @@
            <td>{{person.last_name}}</td>
            <td>{{person.gender}}</td>
            <td>{{person.email}}</td>
-           <td>{{person.password}}</td>
            <td>{{person.phone}}</td>
            <td>{{person.birthdate}}</td>
            <td>{{person.regi_date}}</td>
+           <td><button type="button" class="btn btn-success" onclick="addpromo({{person.person_id}})"><a href="{% url 'customer_promo' %}">Add Promo</a></button></td>
        </tr>
     {% endfor %}
 
 </table>
+{% endblock %}
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/seepersonpromo.js' %}"></script>
 {% endblock %}

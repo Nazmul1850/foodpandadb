@@ -9,6 +9,7 @@
         <th>CUISINE</th>
         <th>PRICE</th>
         <th>AVAILABILITY</th>
+        <th>IMAGE</th>
         <th>OFFER PRICE</th>
     </tr>
     {% for food in foods %}
@@ -17,6 +18,7 @@
            <td class="editable" data-id="{{ food.id }}" data-type="cuisine">{{food.cuisine }}</td>
            <td class="editable" data-id="{{ food.id }}" data-type="price">{{food.price }}</td>
            <td class="editable" data-id="{{ food.id }}" data-type="avl">{{food.availability }}</td>
+           <td class="editable" data-id="{{ food.id }}" data-type="img"><img src="{{food.image }}" alt="pic not inserted" width="100px" height="100px"></td>
            <td class="editable">{{food.offer_price}}</td>
        </tr>
     {% endfor %}

@@ -1,0 +1,28 @@
+
+{% extends 'delivery/base.html' %}
+{% block delicontent %}
+<div class="tableheader">
+  <h1>PENDING ORDERS</h1>
+</div>
+<table width="100%"  border="1">
+    <tr style="background-color:lightgray">
+        <th>ORDER ID</th>
+        <th>START TIME</th>
+        <th>PERSON</th>
+        <th>Option</th>
+    </tr>
+    {% for order in orders %}
+       <tr>
+         <td>{{order.order_id}}</td>
+           <td>{{order.start }}</td>
+           <td>{{order.person}}</td>
+           <td><form id="all_order" method="post">
+             {% csrf_token %}
+             <input type="hidden" name="order_id" value="{{order.order_id}}">
+             <button type="submit" name="button">Accept</button>
+           </form></td>
+       </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

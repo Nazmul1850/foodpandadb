@@ -1,0 +1,28 @@
+{% extends 'delivery/base.html' %}
+{% block delicontent %}
+<div class="pen-order">
+  <h2>{{info.order_id}}</h2>
+  <h2>{{info.total}}</h2>
+  <h2>{{info.res_name}}</h2>
+  <button type="button" class="btn btn-info" id="complete" onclick="completeOrder({{info.order_id}})"><a href="{% url 'delivery' %}">Complete</a></button>
+</div>
+{% endblock %}
+{% block dpagescript %}
+{% load static %}
+<script>
+  function completeOrder(id) {
+    console.log("complete called");
+    $.ajax({
+        url:"http://localhost:8000/completeDelivery/",
+        type:"POST",
+        data:{'id':id},
+    })
+    .done(function(response){
+        console.log(response);
+    })
+    .fail(function(){
+       console.log("Error Occured");
+    });
+  }
+</script>
+{% endblock %}

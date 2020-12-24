@@ -1,0 +1,49 @@
+
+{% extends 'delivery/base.html' %}
+{% block delicontent %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <h2>Update Your Profile</h2>
+    </div>
+</div>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+      {% if error %}
+          <div class="alert alert-danger" role="alert">
+              {{ error }}
+          </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" class="form-control" id="first_name" required="true" value="{{ dict_result.first_name }}">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" name="last_name" class="form-control" id="last_name" required="true" value="{{ dict_result.last_name }}">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <input type="text" name="gender" list="choices" class="form-control" id="gender" required="true" value="{{ dict_result.gender }}">
+            <datalist id="choices">
+              <option value="MALE">
+              <option value="FEMALE">
+              <option value="OTHERS">
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="number" name="phone" class="form-control" id="phone" value="{{ dict_result.phone }}">
+        </div>
+        <div class="form-group">
+            <label for="birthdate">Birthdate</label>
+            <input type="date" name="birthdate" class="form-control" id="birthdate" value="{{ dict_result.birthdate }}">
+        </div>
+        <button type="submit" name="update" class="btn btn-primary">Update</button>
+        <a href="{% url 'home' %}" class="btn btn-primary">Skip</a>
+      </form>
+      <br>
+    </div>
+</div>
+{% endblock %}

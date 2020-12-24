@@ -1,7 +1,7 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
 <div class="row justify-content-center mt-5">
-        <div class="col-md-5">
+        <div id="updatepro" class="col-md-5">
             <h2>Login</h2>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <hr>
-            <div class="text-center">
+            <div class="text-center" style="color:white">
                 Need an account? <a href="{% url 'signupuser' %}">Sign Up here</a>
             </div>
         </div>

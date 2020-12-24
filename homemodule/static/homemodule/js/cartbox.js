@@ -40,9 +40,9 @@ function checkRes(res_name,id, name, price) {
   if (sessionStorage.getItem("res_name") == null || (foodlist.length == 0)) {
     sessionStorage.setItem("res_name",res_name);
     foodObject(id,name,price);
-    const res_check = document.getElementById('res-check');
-    res_check.innerHTML = `
-    `;
+    //const res_check = document.getElementById('res-check');
+    //res_check.innerHTML = `
+    //`;
     //console.log("Notun res");
   }
   else {
@@ -95,39 +95,52 @@ function deleteCart(id){
 
 // NOTE: Refresh ul li items in cart
 $(document).ready(function() {
-  var b2 = $("button.plus");
+  var b2 = $(".plus");
   btnclick = {
     updateol: function() {
-    const renderHook = document.getElementById('showcart');
-    const cartlist = document.getElementById('ol-cart-list');
-    var items = document.querySelectorAll("#ol-cart-list li");
+    //const renderHook = document.getElementById('showcart');
+    console.log('called');
+    //const cartlist = document.getElementById('ol-cart-list');
+    //var items = document.querySelectorAll("#ol-cart-list li");
     //console.log(items);
-    for(var i=0; i<items.length; i++) {
+    //for(var i=0; i<items.length; i++) {
       //console.log(items[i]);
-      items[i].parentNode.removeChild(items[i]);
-    }
+      //items[i].parentNode.removeChild(items[i]);
+    //}
     var total = 0;
+    var cartamount = 0;
     for (const cart of foodlist) {
-        const cartitem = document.createElement('li');
-        cartitem.classname = 'cart-item';
+        cartamount += 1;
+        //const cartitem = document.createElement('li');
+        //cartitem.classname = 'cart-item';
         total += cart.amount * cart.price
         //console.log(cart.name);
-        cartitem.innerHTML = `
-        <div class="cartitem-content">
-            <span>${cart.name} (${cart.amount})</span>
-            <span>/${cart.price}</span>
-            <button type="button" id = "minus" name="minus" onclick="deleteCart(${cart.id})">-</button>
-          </div>
-        `;
-        cartlist.append(cartitem);
+        // cartitem.innerHTML = `
+        // <div class="cartitem-content">
+        //     <span>${cart.name} (${cart.amount})</span>
+        //     <span>/${cart.price}</span>
+        //     <button type="button" id = "minus" name="minus" onclick="deleteCart(${cart.id})">-</button>
+        //   </div>
+        // `;
+        // cartlist.append(cartitem);
     }
-    const cost = document.getElementById('total-price');
-    cost.innerHTML = `
-        <span>Total :${total}</span>
-    `;
-    cartlist.append(cost);
-    renderHook.append(cartlist);
+    // const cost = document.getElementById('total-price');
+    // cost.innerHTML = `
+    //     <span>Total :${total}</span>
+    // `;
+    // cartlist.append(cost);
+    // renderHook.append(cartlist);
     sessionStorage.setItem("foodlist", JSON.stringify(foodlist));
+    const cart = document.getElementById('cart_icon');
+    var presup = document.getElementById('cart_sup');
+    presup.remove();
+    const sup = document.createElement('sup');
+    sup.id = 'cart_sup'
+    sup.innerHTML = `
+       <b><span style="color:red">${cartamount}</span></b>
+    `;
+    cart.append(sup);
+
   }
 }
   btnclick.updateol.call();

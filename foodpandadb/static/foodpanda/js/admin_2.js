@@ -57,6 +57,7 @@ function addRowFood(res_id) {
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-cuisine" class="form-control"></td>
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-price" class="form-control"></td>
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-avl" class="form-control"></td>
+      <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-img" class="form-control"></td>
       <td class="neweditableB" data-id="-1"><a class="btn btn-sm btn-success" href="#" onclick="add_newfood_of_res(${res_id})">Update</a></td>
     `;
 }
@@ -67,11 +68,12 @@ function add_newfood_of_res(res_id) {
   var cuisine = document.getElementById("new-input-data-cuisine").value;
   var price = document.getElementById("new-input-data-price").value;
   var avl = document.getElementById("new-input-data-avl").value;
+  var img = document.getElementById("new-input-data-img").value;
   console.log(name + cuisine + price + avl);
   $.ajax({
       url:"http://localhost:8000/addnewfood/",
       type:"POST",
-      data:{res_id:res_id,name:name,cuisine:cuisine,price:price,avl:avl},
+      data:{res_id:res_id,name:name,cuisine:cuisine,price:price,avl:avl,img:img},
   })
   .done(function(response){
       console.log(response);

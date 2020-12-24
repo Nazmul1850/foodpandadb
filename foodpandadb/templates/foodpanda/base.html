@@ -16,7 +16,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 
-    <link rel="icon" type="image/png" href="{% static "foodpanda/logo.png" %}">
+    <link rel="icon" type="image/png" href="{% static "foodpandauth/logo2.png" %}">
     <link rel="stylesheet" href="{% static 'foodpanda/js/jquery-ui-1.12.1/jquery-ui.min.css' %}">
     <link rel="stylesheet" href="{% static 'foodpanda/js/jquery-ui-1.12.1/jquery-ui.structure.min.css' %}">
     <link rel="stylesheet" href="{% static 'foodpanda/js/jquery-ui-1.12.1/jquery-ui.theme.min.css' %}">
@@ -27,10 +27,12 @@
     <title>FOODPANDA ADMIN</title>
   </head>
   <body>
+    <div class="bg">
+    </div>
     <nav id="topNav" class="navbar navbar-expand-md navbar-light bg-warning">
   <div class="container">
     <a class="navbar-brand" href="{% url 'foodpandadmin' %}">
-      <img src="{% static "foodpandauth/logo1.png" %}" width="30" height="30" class="d-inline-block align-top" alt="Nazmul's Logo">
+      <img src="{% static "foodpandauth/logo2.png" %}" width="30" height="30" class="d-inline-block align-top" alt="Nazmul's Logo">
       {% if 'Admin_id' in request.session %}
       <span>HI, <b>{{ request.session.Admin_name }}</b></span>
       {% else %}
@@ -43,12 +45,12 @@
     <div class="collapse navbar-collapse " id="navbarNav">
         <ul class="navbar-nav ml-auto">
           {% if 'Admin_id' in request.session %}
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">OP1</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">op2</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="#" onclick="$('#signOutBtn').click()" class="nav-link">Logout</a>
             <form style='display: none;' method="POST" action="{% url 'logoutadmin' %}">
@@ -67,21 +69,20 @@
 
   </div>
 </nav>
+{% if 'Admin_id' in request.session %}
 <div class="header">
   <h1>ADMIN PAGE</h1>
 </div>
 <div class="tablebuttons">
     <a role="button" href="{% url 'persons' %}" class="btn">PERSON</a>
     <a role="button" href="{% url 'restaurant' %}" class="btn">RESTAURANT</a>
+    <a role="button" href="{% url 'locations' %}" class="btn">LOCATIONS</a>
     <a role="button" href="{% url 'orders' %}" class="btn">ORDER</a>
     <a role="button" href="{% url 'promos' %}" class="btn">PROMO</a>
-    <a role="button" href="{% url 'payments' %}" class="btn">PAYMENT</a>
-    <a role="button" href="{% url 'offers' %}" class="btn">OFFER</a>
     <a role="button" href="{% url 'reviews' %}" class="btn">REVIEW</a>
-    <a role="button" href="{% url 'customer_promo' %}" class="btn">PERSON PROMO</a>
-    <a role="button" href="{% url 'orderd_items' %}" class="btn">ORDERED ITEMS</a>
 
 </div>
+{% endif %}
 <div class="container">
   {% block dbcontent %}{% endblock %}
 </div>

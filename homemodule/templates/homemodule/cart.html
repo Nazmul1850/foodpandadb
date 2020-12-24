@@ -1,0 +1,36 @@
+{% extends 'foodpandauth/base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div id="updatepro" class="col-md-5">
+        <h2>My Cart Items</h2>
+    </div>
+</div>
+<div class="cart-page">
+  {% load static %}
+  <div class="busket">
+    <div id="showcart">
+      <div id="cartitem-content" class="cartitem-content">
+        <ul class="horizontal">
+           <li><span id="cart-name">Food Name</span></li>
+           <li><span id="cart-amount">Amount</span></li>
+           <li><span id="cart-price">/Price</span></li>
+           <li><span id="cart-option">Option</span></li>
+        </ul>
+      </div>
+      <ol id="ol-cart-list" class="ol-cart-list">
+      </ol>
+    </div>
+    <div id="res-check" class="res-check"></div>
+    <div id="last-option">
+    </div>
+    <div id="last-option1">
+      <a href="{% url 'confirmOrder' %}" id="check-out" class= "button" style="color:green">Check Out</a>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block homepagescript %}
+{% load static %}
+<script src="{% static 'homemodule/js/cartpage.js' %}"> </script>
+{% endblock %}

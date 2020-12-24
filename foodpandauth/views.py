@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import connection
 from django.db import IntegrityError
-
+import hashlib;
 # Create your views here.
 
 def home(request):
@@ -23,6 +23,8 @@ def signupuser(request):
             cursor = connection.cursor()
             email = request.POST['username']
             password = request.POST['password1']
+            password = password.encode()
+            password = hashlib.sha256(password).hexdigest()
             countsql = "SELECT COUNT(*) FROM PERSON"
             cursor.execute(countsql)
             result = cursor.fetchall()
@@ -50,6 +52,8 @@ def loginuser(request):
         cursor = connection.cursor()
         email = request.POST['username']
         password = request.POST['password']
+        password = password.encode()
+        password = hashlib.sha256(password).hexdigest()
         sql = "SELECT PERSON_ID, FIRST_NAME FROM PERSON WHERE EMAIL = "
         sql += "'"
         sql += email

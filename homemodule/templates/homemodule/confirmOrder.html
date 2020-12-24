@@ -1,18 +1,30 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
-{% load static %}
-<script src="{% static 'homemodule/js/confirmCart.js' %}"> </script>
-
 {% if orderON %}
 {{ orderON }}
 {% else %}
-<div id="confirm-cart" class="confirm-cart">
-  <ol id="ol-confirm-cart" class="ol-confirm-cart">
-    <div id="total-confirm" class="total-confirm"></div>
-  </ol>
-</div>
-<div class="confirm-system">
-  <button type="button" id="confirm-button" class="btn btn-info btn-md">Confirm Order</button>
+<div class="confirm-order">
+  <div id="confirm-cart" class="confirm-cart">
+    <ol id="ol-confirm-cart" class="ol-confirm-cart">
+      <div id="total-confirm" class="total-confirm"></div>
+    </ol>
+  </div>
+  <div class="confirm-system">
+      {% if promo %}
+      <div class="promo">
+          <p>Your Promos</p>
+          {% for p in promo %}
+             <input type="radio" name="promo" id="{{p.code}}" value="{{p.code}}"><span>{{p.code}}-->{{p.discount}}</span><br>
+          {% endfor %}
+      </div>
+      {% endif %}
+      <br>
+      <button type="button" id="confirm-button" class="btn btn-info btn-md" onclick="postAll()">Confirm Order</button>
+  </div>
 </div>
 {% endif %}
+{% endblock %}
+{% block homepagescript %}
+{% load static %}
+<script src="{% static 'homemodule/js/confirmCart.js' %}"> </script>
 {% endblock %}

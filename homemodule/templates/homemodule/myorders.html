@@ -1,16 +1,19 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
+<div class="see-status">
+  <button type="button" class="btn btn-success"><a href="{% url 'receiveOrder' %}">Current Order</a></button>
+</div>
 
 <table width="100%"  border="1">
-    <tr style="background-color:lightgray">
+    <tr style="background-color:#D9ECB3; opacity:1">
         <th>ORDER ID</th>
         <th>START TIME</th>
         <th>DELIVERY TIME</th>
-        <th>DELIVERY MAN ID</th>
+        <th>COST</th>
         <th>STATUS</th>
     </tr>
     {% for order in orders %}
-       <tr>
+       <tr style="background-color:#D9ECB3; opacity:0.7">
            <td>{{order.order_id}}</td>
            <td>{{order.start_time }}</td>
            <td>{{order.delivery_time }}</td>
@@ -21,4 +24,6 @@
 
 </table>
 
+{% endblock %}
+{% block homepagescript %}
 {% endblock %}

@@ -26,3 +26,55 @@ def  locations (request):
         <td class="neweditable" data-id="-1" data-type="openning"></td>
         <td class="neweditable" data-id="-1" data-type="closing"></td>
         <td><a class="btn btn-success" href="#">Add</a></td>
+
+        <div class="reviews">
+          {% if reviews %}
+            {% for r in reviews %}
+                {{r.name}}-->{{r.rat}}-->{{r.des}}
+            {% endfor %}
+          {% endif %}
+        </div>
+
+
+        <div class="busket">
+          <div id="showcart">
+            <ol id="ol-cart-list" class="ol-cart-list">
+              <div id="total-price" class="total-price"></div>
+              <div id="res-check" class="res-check"></div>
+            </ol>
+          </div>
+           <a href="{% url 'confirmOrder' %}" id="check-out" class= "button">Check Out</a>
+          </div>
+
+
+
+
+
+
+
+
+
+
+          {% for key,values in dict_result.items %}
+            <div class="cuisine">
+              <p>{{key}}</p>
+               <div class="row-box">
+                 {% for foods in values %}
+                 <div class="col-3">
+                     {% load static %}
+                     <img class="res-pic" src="{% static "foodpandauth/defaultres.jpg" %}" alt="">
+                     <p id="res-name"><b>{{foods.name}}</b></p>
+                       {% if foods.status %}
+                         <p>{{foods.price}} <span>Offer Price: {{foods.offer_price}}</p>
+                       {% else %}
+                         <p>{{foods.price}}</p>
+                       {% endif %}
+                     <button type="button" name="plus" class="res_button"
+                       onclick="checkRes('{{foods.res_name}}',{{foods.id}},'{{foods.name}}',{{foods.offer_price}})">
+                       Add To Cart
+                    </button>
+                 </div>
+                 {% endfor %}
+               </div>
+               </div>
+          {% endfor %}

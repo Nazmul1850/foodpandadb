@@ -1,4 +1,4 @@
-var totalprice = 0;
+
 var foodlist = [];
 
 
@@ -22,7 +22,6 @@ $(document).ready(function(){
   for(m in memory) {
     //console.log(memory[m].name);
     foodlist.push(new FoodCart(memory[m].id,memory[m].name,memory[m].price,memory[m].amount));
-    totalprice += memory[m].price;
   }
 });
 
@@ -31,11 +30,12 @@ $(document).ready(function(){
   const renderHook = document.getElementById('confirm-cart');
   const cartlist = document.getElementById('ol-confirm-cart');
 
-
+  var total = 0;
   for (const cart of foodlist) {
       const cartitem = document.createElement('li');
       cartitem.classname = 'confirm-item';
       //console.log(cart.name);
+      total += cart.amount * cart.price
       cartitem.innerHTML = `
       <div class="confirm-item-content">
           <span>${cart.name} (${cart.amount})</span>
@@ -46,38 +46,76 @@ $(document).ready(function(){
   }
   const cost = document.getElementById('total-confirm');
   cost.innerHTML = `
-      <span>Total :${totalprice}</span>
+      <span>Total :${total}</span>
   `;
   cartlist.append(cost);
   renderHook.append(cartlist);
 
 
-
-  $(".btn").click(function() {
-    //alert("kkkkd");
-    var foods = getString();
-    var form = document.createElement("form");
-    form.setAttribute("method", 'POST');
-    form.setAttribute("action", '');
-    var hiddenField = document.createElement("input");
-    hiddenField.setAttribute("type", "hidden");
-    hiddenField.setAttribute("name", "foodids");
-    hiddenField.setAttribute("value", foods);
-    form.appendChild(hiddenField);
-
-    csrfField = document.createElement("input");
-    var csrftoken = getCookie('csrftoken');
-    console.log("token" + csrftoken);
-    csrfField.setAttribute("type", "hidden");
-    csrfField.setAttribute("name", "csrfmiddlewaretoken");
-    csrfField.setAttribute("value", csrftoken);
-    form.appendChild(csrfField);
-    document.body.appendChild(form);
-    form.submit();
-    //sessionStorage.setItem("foodlist", "");
-  });
+  // $(".btn").click(function() {
+  //   //alert("kkkkd");
+  //   var foods = getString();
+  //   var form = document.createElement("form");
+  //   form.setAttribute("method", 'POST');
+  //   form.setAttribute("action", '');
+  //   var hiddenField = document.createElement("input");
+  //   hiddenField.setAttribute("type", "hidden");
+  //   hiddenField.setAttribute("name", "foodids");
+  //   hiddenField.setAttribute("value", foods);
+  //   form.appendChild(hiddenField);
+  //
+  //   csrfField = document.createElement("input");
+  //   var csrftoken = getCookie('csrftoken');
+  //   console.log("token" + csrftoken);
+  //   csrfField.setAttribute("type", "hidden");
+  //   csrfField.setAttribute("name", "csrfmiddlewaretoken");
+  //   csrfField.setAttribute("value", csrftoken);
+  //   form.appendChild(csrfField);
+  //   document.body.appendChild(form);
+  //   form.submit();
+  //   sessionStorage.setItem("foodlist", "");
+  // });
 
 });
+
+
+
+function postAll() {
+  var code="";
+  var ele = document.getElementsByName('promo');
+  for(i = 0; i < ele.length; i++) {
+      if(ele[i].checked) {
+        console.log(ele[i].value);
+        code = ele[i].value;
+        break;
+      }
+  }
+  var foods = getString();
+  var form = document.createElement("form");
+  form.setAttribute("method", 'POST');
+  form.setAttribute("action", '');
+  var hiddenField = document.createElement("input");
+  hiddenField.setAttribute("type", "hidden");
+  hiddenField.setAttribute("name", "foodids");
+  hiddenField.setAttribute("value", foods);
+  form.appendChild(hiddenField);
+  var promocode = document.createElement("input");
+  promocode.setAttribute("type", "hidden");
+  promocode.setAttribute("name", "hpromo");
+  promocode.setAttribute("value", code);
+  form.appendChild(promocode);
+
+  csrfField = document.createElement("input");
+  var csrftoken = getCookie('csrftoken');
+  console.log("token" + csrftoken);
+  csrfField.setAttribute("type", "hidden");
+  csrfField.setAttribute("name", "csrfmiddlewaretoken");
+  csrfField.setAttribute("value", csrftoken);
+  form.appendChild(csrfField);
+  document.body.appendChild(form);
+  form.submit();
+  sessionStorage.setItem("foodlist", "");
+}
 
 
 

@@ -94,7 +94,7 @@ function addRow() {
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-opening" class="form-control"></td>
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-closing" class="form-control"></td>
       <td class="neweditable" data-id="-1"><input type="text" id="new-input-data-image" class="form-control"></td>
-      <td class="neweditable" data-id="-1"><a class="btn btn-sm btn-success" href="{% url 'restaurant' %}" onclick="newValue()">Update</a></td>
+      <td class="neweditable" data-id="-1"><a class="btn btn-sm btn-success" onclick="newValue()">Update</a></td>
     `;
 }
 function newValue() {

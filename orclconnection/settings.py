@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'foodpandadb',
     'foodpandauth',
     'homemodule',
+    'delivery',
 ]
 
 MIDDLEWARE = [

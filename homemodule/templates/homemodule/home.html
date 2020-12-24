@@ -1,7 +1,6 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
 {% load static %}
-<script src="{% static 'homemodule/js/searchbox.js' %}"> </script>
 <div class="hero-content">
   <div class="searchContent">
     <form id="search-form" method="post">
@@ -12,12 +11,40 @@
         <option value="cuisine">Cuisine</option>
         <option value="price">Price</option>
       </select>
-      <button type="submit"name="searchButton" class="searchButton">Search</button><br>
+      <button type="submit"name="searchButton" class="searchButton">
+        <img src="{% static 'homemodule/search.png' %}" width="40" height="40" alt="Search">
+      </button><br>
     </form>
-    <span>Your current location is ({{address.latitude}},{{address.longitude}}) {{ address.region }}-{{ address.postal }}, {{ address.city }}, {{ address.country }}</span>
   </div>
+  <!-- <div class="location">
+    <span>Your current location is ({{address.latitude}},{{address.longitude}}) {{ address.region }}-{{ address.postal }}, {{ address.city }}, {{ address.country }}</span>
+  </div> -->
   <div class="restaurants">
-    <table width="100%"  border="1">
+      <div class="row-box">
+        {% for res in restaurant %}
+        <div class="col-3">
+            {% load static %}
+            {% if res.image %}
+            <img class="res-pic" src="{{res.image}}"alt="">
+            {% else %}
+            <img class="res-pic" src="{% static "foodpandauth/defaultres.jpg" %}" alt="">
+            {% endif %}
+            {% if res.rat %}
+            <p id="res-name"><b>{{res.name}}</b><small>  ({{res.rat}})</small></p>
+            {% else %}
+            <p id="res-name"><b>{{res.name}}</b><small>  (0.0)</small></p>
+            {% endif %}
+            <!-- <p>{{res.name}}</p><p class="rat">({{res.rat}})</p> -->
+            <small>Opens at: {{res.openning}}-->Closes at:{{res.closing}}</small>
+            <form id="all_res" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="res_name" value="{{res.name}}">
+            <button type="submit" id="res_button">SEE</button>
+            </form>
+        </div>
+        {% endfor %}
+      </div>
+    <!-- <table width="100%"  border="1">
         <tr style="background-color:lightgray">
             <th>NAME</th>
             <th>PHONE</th>
@@ -38,7 +65,11 @@
            </tr>
         {% endfor %}
 
-    </table>
+    </table> -->
   </div>
 </div>
+{% endblock %}
+{% block homepagescript %}
+{% load static %}
+<script src="{% static 'homemodule/js/searchbox.js' %}"> </script>
 {% endblock %}

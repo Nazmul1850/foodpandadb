@@ -14,13 +14,24 @@
     </tr>
     {% for promo in promos %}
        <tr>
-           <td>{{promo.code}}</td>
-           <td>{{promo.discount_pct }}</td>
-           <td>{{promo.start }}</td>
-           <td>{{promo.end }}</td>
-           <td>{{promo.status}}</td>
+           <td class="editable" data-id="{{ promo.code }}" data-type="code">{{promo.code}}</td>
+           <td class="editable" data-id="{{ promo.code }}" data-type="discount">{{promo.discount_pct }}</td>
+           <td class="editable" data-id="{{ promo.code }}" data-type="start">{{promo.start }}</td>
+           <td class="editable" data-id="{{ promo.code }}" data-type="end">{{promo.end }}</td>
+           <td class="editable" data-id="{{ promo.code }}" data-type="status">{{promo.status}}</td>
        </tr>
     {% endfor %}
+    <tr id="new-row-promo">
+    </tr>
+    <tr>
+      <td><button type="button" class="btn btn-success" onclick="addRowPromo()">Add</button></td>
+      <td><button type="button" class="btn btn-success" onclick="updatePromo()">Update</button></td>
+    </tr>
 
 </table>
+{% endblock %}
+
+{% block pagescript %}
+{% load static %}
+<script src="{% static 'foodpanda/js/promo.js' %}"></script>
 {% endblock %}

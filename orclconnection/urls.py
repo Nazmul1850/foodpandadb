@@ -19,6 +19,9 @@ import foodpandadb.views as food_view
 import foodpandadb.apiViews as db_view
 import foodpandauth.views as auth_view
 import homemodule.views as home_view
+import homemodule.apiViews as home_apiview
+import delivery.views as deli_view
+import delivery.apiViews as deli_apiview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +38,11 @@ urlpatterns = [
     path('addnewoffer/',db_view.addnewoffer, name="addnewoffer"),
     path('saveoffer/',db_view.saveoffer, name="saveoffer"),
     path('updateOffer/',db_view.updateOffer, name="updateOffer"),
+    path('completeDelivery/',deli_apiview.completeDelivery, name="completeDelivery"),
+    path('addnewpromo/',db_view.addnewpromo, name="addnewpromo"),
+    path('personpromo/',db_view.personpromo, name="personpromo"),
+    path('addnewpersonpromo/',db_view.addnewpersonpromo, name="addnewpersonpromo"),
+    path('updateprpmo/',db_view.updateprpmo, name='updateprpmo'),
 
     path('persons/', food_view.list_person, name='persons'),
     path('food/', food_view.food, name='food'),
@@ -46,8 +54,13 @@ urlpatterns = [
     path('offers/', food_view.offers, name='offers'),
     path('reviews/', food_view.reviews, name='reviews'),
     path('customer_promo/', food_view.customer_promo, name='customer_promo'),
-    path('orderd_items/', food_view.orderd_items, name='orderd_items'),
 
+
+    path('delivery/',deli_view.delivery,name='delivery'),
+    path('logindelivery/',deli_view.logindelivery,name='logindelivery'),
+    path('logoutdelivery/',deli_view.logoutdelivery,name='logoutdelivery'),
+    path('updateDelivery/',deli_view.updateDelivery,name='updateDelivery'),
+    path('signupDelivery/',deli_view.signupDelivery,name='signupDelivery'),
 
 
 # NOTE: Authenticate
@@ -61,7 +74,9 @@ urlpatterns = [
   path('',home_view.home, name="homelocation"),
   # path('res/',home_view.showRestaurant, name="showRestaurant"),
   path('confirmOrder/',home_view.confirmOrder,name='confirmOrder'),
-  path('check/',home_view.check,name="check"),
   path('myorders/',home_view.myorders,name="myorders"),
   path('receiveOrder/',home_view.receiveOrder,name="receiveOrder"),
+   path('completeOrder/',home_apiview.completeOrder,name="completeOrder"),
+   path('mycart/',home_view.mycart,name="mycart"),
+   path('extra/',home_view.extra,name="extra"),
 ]

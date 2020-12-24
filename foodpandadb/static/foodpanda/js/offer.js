@@ -83,3 +83,15 @@ function add_newOffer(res_id) {
      console.log("Error Occured");
   });
 }
+function updateOffer() {
+  $.ajax({
+      url:"http://localhost:8000/updateOffer/",
+      type:"POST",
+  })
+  .done(function(response){
+      console.log(response);
+  })
+  .fail(function(){
+     console.log("Error Occured");
+  });
+}

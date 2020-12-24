@@ -1,21 +1,29 @@
 {% extends 'foodpandauth/base.html' %}
 {% block content %}
 {% load static %}
-<script src="{% static 'homemodule/js/receiveOrder.js' %}"> </script>
-
+{% if error %}
+{{error}}
+{% else %}
 <div id="order-info" class="order-info">
-  <h3>{{orderInfo.order_id}}</h3>
-  <h3>{{orderInfo.res_name}}</h3>
-  <h3>{{orderInfo.name}}</h3>
+  <h3><small><small>ORDERID:</small></small>{{orderInfo.order_id}}</h3>
+  <h3><small><small>ORDERED FROM:</small></small> {{orderInfo.res_name}}</h3>
+  <h3><small><small>ORDERED BY:</small></small> {{orderInfo.name}}</h3>
   <ol id="ol-order-info" class="ol-order-info">
     {% for item in order_items %}
-    <li><b>{{item.food_name}}</b><span> ---- </span>Price:{{item.price}}tk  <span>----</span>  Amount:{{item.amount}}</li>
+    <li><b>{{item.food_name}}</b><span> ----Amount:{{item.amount}}---- </span>Price:{{item.price}}tk</li>
     {% endfor %}
   </ol>
   <div id="total-order" class="total-order"><h3>Total: {{orderInfo.total}}</h3> </div>
   <h4>{{orderInfo.orderON}}</h4>
+  {% if delivery %}
+  <p>Your Order is Picked By: {{delivery.d_name}}</p>
+  <p>Phone: 0{{delivery.d_phone}}</p>
   <span><small>Click If Order is Rechived</small><br></span>
   <button type="button" id="order-receive" class="btn btn-success">Received</button>
+  {% else %}
+  <button type="button" id="order-reload" class="btn btn-success"><a href="{% url 'receiveOrder' %}">Reload</a></button>
+  {% endif %}
+
 </div>
 <div class="popup-review">
   <div class="review-content">
@@ -32,8 +40,14 @@
       <textarea name="comment" rows="4" cols="55" placeholder="Please Comment to Improve"></textarea>
       <input type="hidden" name="order_id" value="{{orderInfo.order_id}}">
       <button type="submit" class="submit btn btn-info btn-sm">Submit</button>
-      <button type="button" class="btn btn-info btn-sm"><a href="{% url 'homelocation' %}"></a>Skip</button>
+      <button type="button" class="btn btn-info btn-sm"><a href="{% url 'homelocation' %}">Skip</a></button>
     </form>
   </div>
 </div>
+{% endif %}
+{% endblock %}
+
+{% block homepagescript %}
+{% load static %}
+<script src="{% static 'homemodule/js/receiveOrder.js' %}"> </script>
 {% endblock %}
