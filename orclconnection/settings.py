@@ -25,7 +25,7 @@ SECRET_KEY = 't*9s^l(7bvfze+0$xo5vivvg28*czoj1qm^6tg1@m)+cm!=h#&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['foodpanda.pythonanywhere.com']
 
 
 # Application definition
